@@ -1,0 +1,1780 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="light" />
+  <meta name="theme-color" content="#0F4C81" />
+  <meta name="description" content="Guru Imob — monitor de preços de imóveis com filtro por R$/m², histórico de quedas e análise por bairro." />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Guru Imob — Monitor de preços de imóveis</title>
+  <link rel="icon" type="image/png" href="/logo/guru-imob-logo.png" />
+  <style>
+    /* ============================================================
+       Guru Imob — Design System (tema claro profissional)
+       ============================================================ */
+    :root{
+      /* Marca — azul confiança */
+      --brand-50:#EAF2FA;  --brand-100:#D3E4F4;  --brand-200:#A9C9E8;
+      --brand-500:#1B6FB5; --brand-600:#0F4C81;  --brand-700:#0B3A63; --brand-800:#082B4A;
+      /* Apoio — verde valor/oportunidade */
+      --accent-50:#E7F7F1; --accent-100:#C8EEDF;
+      --accent-500:#12B886; --accent-600:#0E9F6E; --accent-700:#0A7D57;
+      /* Neutros */
+      --bg:#F5F8FC; --surface:#FFFFFF; --surface-2:#FAFCFE;
+      --border:#E2E8F0; --border-strong:#CBD5E1;
+      --text:#0F1B2D; --text-2:#41536B; --muted:#6B7C93;
+      /* Semânticas */
+      --danger:#D92D20; --danger-50:#FEF3F2;
+      --warn:#B54708;  --warn-50:#FFFAEB;
+      --ring:rgba(27,111,181,.32);
+      /* Formas */
+      --r-sm:8px; --r:12px; --r-lg:16px; --r-full:999px;
+      --sh-sm:0 1px 2px rgba(16,24,40,.06);
+      --sh:0 4px 16px rgba(16,24,40,.07);
+      --sh-lg:0 12px 32px rgba(16,24,40,.10);
+      --maxw:1240px;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    html{-webkit-text-size-adjust:100%}
+    body{
+      margin:0; background:var(--bg); color:var(--text);
+      font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+      -webkit-font-smoothing:antialiased;
+    }
+    h1,h2,h3,p{margin:0}
+    a{color:var(--brand-600)}
+    :focus-visible{outline:3px solid var(--ring); outline-offset:2px; border-radius:var(--r-sm)}
+    .sr-only{
+      position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+      overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+    }
+    .skip{
+      position:absolute; left:16px; top:-60px; z-index:100;
+      background:var(--brand-600); color:#fff; padding:10px 16px;
+      border-radius:var(--r-sm); text-decoration:none; font-weight:600;
+      transition:top .15s ease;
+    }
+    .skip:focus{top:16px}
+
+    /* ---------- App bar ---------- */
+    .appbar{
+      position:sticky; top:0; z-index:50;
+      background:rgba(255,255,255,.92); backdrop-filter:saturate(180%) blur(12px);
+      border-bottom:1px solid var(--border);
+    }
+    .appbar-in{
+      max-width:var(--maxw); margin:0 auto; padding:12px 24px;
+      display:flex; align-items:center; justify-content:space-between; gap:16px;
+    }
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand-logo{
+      display:block; flex:none; height:72px; width:auto; max-width:min(100%, 390px);
+      object-fit:contain;
+    }
+    @media (max-width:720px){
+      .brand-logo{height:58px; max-width:300px}
+    }
+    .appbar-actions{display:flex; align-items:center; gap:10px; flex:none}
+    .pill{
+      display:inline-flex; align-items:center; gap:6px;
+      font-size:12px; font-weight:600; color:var(--accent-700);
+      background:var(--accent-50); border:1px solid var(--accent-100);
+      padding:6px 11px; border-radius:var(--r-full);
+    }
+    @media (max-width:720px){ .pill{display:none} }
+
+    /* ---------- Botões ---------- */
+    .btn{
+      appearance:none; display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      font:inherit; font-weight:600; font-size:14px; line-height:1;
+      padding:11px 16px; border-radius:var(--r); cursor:pointer;
+      border:1px solid var(--border-strong); background:var(--surface); color:var(--text);
+      transition:background .15s, border-color .15s, box-shadow .15s, transform .05s;
+      box-shadow:var(--sh-sm); white-space:nowrap;
+    }
+    .btn:hover{background:var(--surface-2); border-color:var(--muted)}
+    .btn:active{transform:translateY(1px)}
+    .btn:disabled{opacity:.55; cursor:not-allowed; transform:none}
+    .btn svg{flex:none}
+    .btn-primary{
+      background:linear-gradient(180deg,var(--brand-500),var(--brand-600));
+      border-color:var(--brand-700); color:#fff;
+    }
+    .btn-primary:hover{background:linear-gradient(180deg,var(--brand-600),var(--brand-700)); border-color:var(--brand-800)}
+    .btn-accent{
+      background:linear-gradient(180deg,var(--accent-500),var(--accent-600));
+      border-color:var(--accent-700); color:#fff;
+    }
+    .btn-accent:hover{background:linear-gradient(180deg,var(--accent-600),var(--accent-700))}
+    .btn-ghost{background:transparent; border-color:transparent; box-shadow:none; color:var(--text-2)}
+    .btn-ghost:hover{background:var(--brand-50); border-color:transparent; color:var(--brand-700)}
+    .btn-danger{background:var(--surface); border-color:#F0C4BF; color:var(--danger)}
+    .btn-danger:hover{background:var(--danger-50); border-color:var(--danger); color:var(--danger)}
+
+    /* ---------- Layout ---------- */
+    main{max-width:var(--maxw); margin:0 auto; padding:28px 24px 72px; display:grid; gap:20px}
+    .card{
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--r-lg); box-shadow:var(--sh); overflow:hidden;
+    }
+    .card-head{padding:20px 22px 0}
+    .card-head h2{font-size:16px; font-weight:700; letter-spacing:-.01em}
+    .card-sub{font-size:13px; color:var(--muted); margin-top:3px}
+    .card-body{padding:18px 22px 22px}
+    .divider{height:1px; background:var(--border); margin:0}
+
+    /* ---------- Formulário ---------- */
+    .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px 20px}
+    .form-grid .span-2{grid-column:1/-1}
+    @media (max-width:760px){ .form-grid{grid-template-columns:1fr} .form-grid .span-2{grid-column:auto} }
+    label.field{display:block}
+    .field-label{
+      display:flex; align-items:center; gap:6px;
+      font-size:13px; font-weight:600; color:var(--text-2); margin-bottom:7px;
+    }
+    .field-label .opt{font-weight:500; color:var(--muted); font-size:12px}
+    input[type="text"],input[type="number"],select,textarea{
+      width:100%; font:inherit; color:var(--text);
+      padding:11px 13px; border-radius:var(--r);
+      border:1px solid var(--border-strong); background:var(--surface-2);
+      transition:border-color .15s, box-shadow .15s, background .15s;
+    }
+    textarea{resize:vertical; min-height:104px; line-height:1.5}
+    select{
+      appearance:none; cursor:pointer; padding-right:38px;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7C93' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat:no-repeat; background-position:right 13px center;
+    }
+    input::placeholder,textarea::placeholder{color:#9AA9BC}
+    input:hover,select:hover,textarea:hover{border-color:var(--muted)}
+    input:focus,select:focus,textarea:focus{
+      outline:none; background:var(--surface);
+      border-color:var(--brand-500); box-shadow:0 0 0 4px var(--ring);
+    }
+    .hint{font-size:12px; color:var(--muted); margin-top:6px}
+    .hint code{
+      font:12px/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+      background:var(--brand-50); color:var(--brand-700);
+      border:1px solid var(--brand-100); border-radius:5px; padding:1px 5px;
+    }
+
+    /* ---------- Checks ---------- */
+    .checks{display:flex; flex-wrap:wrap; gap:10px; padding-top:4px}
+    .check{
+      display:inline-flex; align-items:center; gap:9px;
+      font-size:13px; font-weight:600; color:var(--text-2);
+      border:1px solid var(--border-strong); background:var(--surface-2);
+      padding:9px 13px; border-radius:var(--r-full); cursor:pointer; user-select:none;
+      transition:border-color .15s, background .15s, color .15s;
+    }
+    .check:hover{border-color:var(--muted)}
+    .check input{width:16px; height:16px; accent-color:var(--brand-600); margin:0; cursor:pointer}
+    .check:has(input:checked){
+      border-color:var(--brand-500); background:var(--brand-50); color:var(--brand-700);
+    }
+
+    /* ---------- Barra de ações ---------- */
+    .actions{
+      display:flex; flex-wrap:wrap; gap:10px;
+      margin-top:20px; padding-top:18px; border-top:1px solid var(--border);
+    }
+    .actions .spacer{flex:1 1 auto}
+
+    /* ---------- Resultado da varredura (R$/m² da região) ---------- */
+    .media-box{
+      display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+      margin-top:16px; padding:16px 18px;
+      border:1px solid var(--brand-100); border-radius:var(--r);
+      background:linear-gradient(180deg,var(--brand-50),var(--surface));
+      box-shadow:var(--sh-sm);
+    }
+    .media-box[hidden]{display:none}
+    .media-ico{
+      display:inline-flex; align-items:center; justify-content:center; flex:none;
+      width:44px; height:44px; border-radius:12px;
+      background:var(--brand-600); color:#fff; box-shadow:var(--sh-sm);
+    }
+    .media-lab{font-size:13px; font-weight:600; color:var(--text-2)}
+    .media-val{
+      font-size:28px; font-weight:800; letter-spacing:-.02em; line-height:1.1;
+      color:var(--brand-700);
+    }
+    .media-unit{font-size:15px; font-weight:700; color:var(--text-2); margin-left:2px}
+    .media-meta{
+      display:flex; flex-wrap:wrap; gap:8px 18px; margin-left:auto;
+      font-size:12.5px; color:var(--muted);
+    }
+    .media-meta strong{color:var(--text)}
+    .media-empty{font-size:13.5px; color:var(--text-2)}
+    .media-empty strong{display:block; color:var(--text); margin-bottom:2px}
+
+    /* ---------- Status ---------- */
+    .status{display:flex; flex-wrap:wrap; gap:8px; margin-top:16px}
+    .status:empty{margin-top:0}
+    .chip{
+      display:inline-flex; align-items:center; gap:7px;
+      font-size:12.5px; font-weight:600;
+      padding:7px 12px; border-radius:var(--r-full);
+      background:var(--brand-50); border:1px solid var(--brand-100); color:var(--brand-700);
+    }
+    .chip.ok{background:var(--accent-50); border-color:var(--accent-100); color:var(--accent-700)}
+    .chip.fail{background:var(--danger-50); border-color:#FBD5D1; color:var(--danger)}
+    .chip.info{background:var(--warn-50); border-color:#FDE7B0; color:var(--warn)}
+
+    /* ---------- KPIs ---------- */
+    .kpis{display:grid; grid-template-columns:repeat(4,1fr); gap:14px}
+    @media (max-width:860px){ .kpis{grid-template-columns:repeat(2,1fr)} }
+    .kpi{
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--r); padding:16px 18px; box-shadow:var(--sh-sm);
+      display:flex; align-items:flex-start; gap:13px; position:relative; overflow:hidden;
+    }
+    .kpi::after{content:""; position:absolute; inset:0 auto 0 0; width:3px; background:var(--brand-500)}
+    .kpi.k-accent::after{background:var(--accent-600)}
+    .kpi.k-warn::after{background:var(--warn)}
+    .kpi-ico{
+      flex:none; width:38px; height:38px; border-radius:10px;
+      display:grid; place-items:center;
+      background:var(--brand-50); color:var(--brand-600);
+    }
+    .kpi.k-accent .kpi-ico{background:var(--accent-50); color:var(--accent-700)}
+    .kpi.k-warn .kpi-ico{background:var(--warn-50); color:var(--warn)}
+    .kpi-val{font-size:26px; font-weight:800; letter-spacing:-.02em; line-height:1.1; font-variant-numeric:tabular-nums}
+    .kpi-lab{font-size:12.5px; color:var(--muted); font-weight:600; margin-top:2px}
+
+    /* ---------- Tabela ---------- */
+    .table-tools{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px; flex-wrap:wrap; padding:18px 22px 14px;
+    }
+    .table-tools h2{font-size:16px; font-weight:700; letter-spacing:-.01em; display:flex; align-items:center; gap:9px}
+    .count-badge{
+      font-size:12px; font-weight:700; color:var(--brand-700);
+      background:var(--brand-50); border:1px solid var(--brand-100);
+      padding:3px 9px; border-radius:var(--r-full); font-variant-numeric:tabular-nums;
+    }
+    .table-wrap{overflow:auto; border-top:1px solid var(--border); max-height:70vh}
+    table{border-collapse:separate; border-spacing:0; width:100%; min-width:1180px}
+    thead th{
+      position:sticky; top:0; z-index:2;
+      background:var(--surface-2); color:var(--text-2);
+      font-size:11.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+      text-align:left; padding:12px 14px; border-bottom:1px solid var(--border-strong);
+      white-space:nowrap;
+    }
+    thead th.sortable{cursor:pointer; user-select:none; transition:color .15s, background .15s}
+    thead th.sortable:hover{color:var(--brand-600); background:var(--brand-50)}
+    thead th[aria-sort]::after{font-size:10px; margin-left:5px; color:var(--brand-600)}
+    thead th[aria-sort="ascending"]::after{content:"▲"}
+    thead th[aria-sort="descending"]::after{content:"▼"}
+    tbody td{
+      padding:12px 14px; border-bottom:1px solid var(--border);
+      vertical-align:top; font-size:14px;
+    }
+    tbody tr:last-child td{border-bottom:0}
+    tbody tr{transition:background .12s}
+    tbody tr:hover{background:var(--surface-2)}
+    tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--brand-500)}
+    td.num{font-variant-numeric:tabular-nums}
+    .empty{padding:48px 22px; text-align:center; color:var(--muted)}
+    .empty strong{display:block; color:var(--text-2); font-size:15px; margin-bottom:4px}
+
+    .thumb{
+      width:78px; height:58px; object-fit:cover; border-radius:8px;
+      border:1px solid var(--border); display:block; background:var(--bg);
+    }
+    .title-cell{max-width:420px}
+    .title-txt{display:block; font-weight:600; color:var(--text); line-height:1.4}
+    .loc-txt{color:var(--text-2); font-size:13px; line-height:1.45}
+    .money{font-weight:800; white-space:nowrap; font-variant-numeric:tabular-nums; font-size:15px}
+    .vm2{
+      display:inline-block; margin-top:3px; font-size:12px; font-weight:700;
+      color:var(--accent-700); background:var(--accent-50);
+      border:1px solid var(--accent-100); border-radius:var(--r-full); padding:2px 8px;
+      white-space:nowrap; font-variant-numeric:tabular-nums;
+    }
+    .tag-soft{color:var(--text-2); font-size:13px}
+    .link-anuncio{
+      color:var(--brand-600); font-weight:600; text-decoration:none; white-space:nowrap;
+      display:inline-flex; align-items:center; gap:4px;
+    }
+    .link-anuncio:hover{text-decoration:underline}
+
+    .th-acoes{width:64px; text-align:center}
+    td.acoes{text-align:center}
+    .btn-del{
+      appearance:none; display:inline-flex; align-items:center; justify-content:center;
+      width:34px; height:34px; border-radius:9px; cursor:pointer;
+      border:1px solid var(--border-strong); background:var(--surface); color:var(--muted);
+      transition:background .15s, border-color .15s, color .15s;
+    }
+    .btn-del:hover{background:var(--danger-50); border-color:#F0C4BF; color:var(--danger)}
+    .btn-del:disabled{opacity:.5; cursor:not-allowed}
+
+    .badge{
+      display:inline-flex; align-items:center; gap:4px; vertical-align:middle;
+      font-size:10.5px; font-weight:800; letter-spacing:.03em; text-transform:uppercase;
+      padding:3px 8px; border-radius:var(--r-full); margin-right:6px; margin-bottom:3px;
+    }
+    .badge.new{background:var(--brand-50); border:1px solid var(--brand-200); color:var(--brand-700)}
+    .badge.drop{background:var(--accent-50); border:1px solid var(--accent-100); color:var(--accent-700)}
+
+    /* ---------- Alerta R$/m² por imóvel ---------- */
+    .th-alerta{width:210px}
+    .alert-cell{display:flex; flex-direction:column; align-items:flex-start; gap:6px; min-width:0}
+    .alert-money{
+      display:flex; align-items:center; gap:8px; flex:none;
+      min-width:0; padding:0 8px 0 10px; border-radius:9px;
+      border:1px solid var(--border-strong); background:var(--surface-2);
+      transition:border-color .15s, box-shadow .15s, background .15s;
+    }
+    .alert-money:focus-within{
+      background:var(--surface);
+      border-color:var(--brand-500); box-shadow:0 0 0 3px var(--ring);
+    }
+    .alert-prefix{
+      flex:none; color:var(--text-2); font-size:12px; font-weight:800;
+      letter-spacing:.02em; white-space:nowrap;
+    }
+    .alert-input{
+      width:10.5ch; min-width:10.5ch; font:inherit; font-size:13.5px; padding:8px 0; border-radius:0;
+      border:0; background:transparent; color:var(--text);
+      font-variant-numeric:tabular-nums; text-align:right; transition:none;
+    }
+    .alert-input::placeholder{color:#9AA9BC}
+    .alert-input:focus{outline:none}
+    .alert-money.armed{border-color:var(--brand-500); background:var(--brand-50)}
+    .alert-money.fired{border-color:var(--accent-600); background:var(--accent-50)}
+    .alert-money.fired .alert-input,
+    .alert-money.fired .alert-prefix{color:var(--accent-700); font-weight:700}
+    .btn-alert{
+      appearance:none; display:inline-flex; align-items:center; justify-content:center;
+      width:32px; height:32px; border-radius:9px; cursor:pointer; flex:none;
+      border:1px solid var(--border-strong); background:var(--surface); color:var(--text-2);
+      transition:background .15s, border-color .15s, color .15s;
+    }
+    .btn-alert:hover{background:var(--brand-50); border-color:var(--brand-500); color:var(--brand-700)}
+    .btn-alert:disabled{opacity:.5; cursor:not-allowed}
+    .btn-alert.remove:hover{background:var(--danger-50); border-color:#F0C4BF; color:var(--danger)}
+    .btn-alert.remove:disabled{background:var(--surface-2); color:#A8B3C2; border-color:var(--border)}
+    .alert-actions{display:flex; flex-direction:row; gap:6px; flex:none; align-items:center}
+    .alert-state{display:block; font-size:11px; font-weight:700; margin-top:5px; letter-spacing:.01em}
+    .alert-state.on{color:var(--brand-600)}
+    .alert-state.hit{color:var(--accent-700)}
+    .alert-state.off{color:var(--muted); font-weight:600}
+
+    /* ---------- Painel de alertas & notificações ---------- */
+    .alert-grid{display:grid; grid-template-columns:minmax(280px,1fr) minmax(320px,1.35fr); gap:24px}
+    @media (max-width:880px){ .alert-grid{grid-template-columns:1fr} }
+    .cfg-resumo{font-size:14px; font-weight:700; color:var(--text-2); margin:0}
+    .cfg-resumo strong{color:var(--accent-700)}
+    .cfg-resumo.vazio{color:var(--warn)}
+    .notif-head{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:11px}
+    .notif-list{display:grid; gap:10px; max-height:320px; overflow:auto; padding-right:2px}
+    .notif{
+      border:1px solid var(--border); border-left:3px solid var(--accent-600);
+      border-radius:var(--r); background:var(--surface-2);
+      padding:12px 14px; display:flex; gap:12px; align-items:flex-start;
+    }
+    .notif-main{min-width:0; flex:1 1 auto}
+    .notif-title{
+      font-weight:700; font-size:13.5px; color:var(--text); line-height:1.35;
+      display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+    }
+    .notif-meta{font-size:12px; color:var(--muted); margin-top:4px}
+    .notif-meta strong{color:var(--accent-700)}
+    .notif-when{font-size:11.5px; color:var(--muted); margin-top:4px; font-variant-numeric:tabular-nums}
+    .notif-empty{
+      border:1px dashed var(--border-strong); border-radius:var(--r);
+      padding:30px 18px; text-align:center; color:var(--muted); font-size:13.5px;
+    }
+    .notif-empty strong{display:block; color:var(--text-2); font-size:14px; margin-bottom:3px}
+    .btn-wa{
+      appearance:none; display:inline-flex; align-items:center; gap:7px; flex:none;
+      font:inherit; font-weight:700; font-size:13px; padding:9px 13px; border-radius:var(--r);
+      border:1px solid var(--accent-700); color:#fff; cursor:pointer; text-decoration:none;
+      background:linear-gradient(180deg,var(--accent-500),var(--accent-600));
+      white-space:nowrap; transition:background .15s, opacity .15s;
+    }
+    .btn-wa:hover{background:linear-gradient(180deg,var(--accent-600),var(--accent-700))}
+    a.btn-wa:hover{text-decoration:none}
+    .btn-wa.off{background:var(--surface); color:var(--muted); border-color:var(--border-strong); cursor:not-allowed}
+
+    /* ---------- Configurações (modal no cabeçalho) ---------- */
+    .modal{
+      border:0; padding:0; background:transparent;
+      width:min(720px,94vw); max-width:min(720px,94vw); max-height:92vh;
+    }
+    .modal::backdrop{background:rgba(15,27,45,.46); backdrop-filter:blur(2px)}
+    .modal-card{
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--r-lg); box-shadow:var(--sh-lg);
+      overflow:hidden; display:flex; flex-direction:column; max-height:92vh;
+    }
+    .modal-head{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:16px;
+      padding:20px 22px; border-bottom:1px solid var(--border); flex:none;
+    }
+    .modal-head h2{font-size:17px; font-weight:700; letter-spacing:-.01em}
+    .btn-x{
+      appearance:none; flex:none; width:34px; height:34px; border-radius:10px; cursor:pointer;
+      border:1px solid var(--border-strong); background:var(--surface); color:var(--text-2);
+      font-size:20px; line-height:1; display:grid; place-items:center;
+      transition:background .15s, border-color .15s, color .15s;
+    }
+    .btn-x:hover{background:var(--danger-50); border-color:#F0C4BF; color:var(--danger)}
+    .modal-body{padding:20px 22px; display:grid; gap:18px; overflow:auto}
+    .cfg-sec{display:grid; gap:14px}
+    .cfg-h{font-size:12.5px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--brand-600); margin:0}
+    .cfg-actions{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+    .cfg-actions .status{margin-top:0}
+    .cfg-sep{height:1px; border:0; background:var(--border); margin:0}
+
+    /* WhatsApp oculto temporariamente no front-end (a captura e os alertas seguem normais) */
+    .is-hidden{display:none !important}
+    .alert-grid.sem-wa{grid-template-columns:1fr}
+
+    /* ---------- Rodapé ---------- */
+    footer{
+      border-top:1px solid var(--border); background:var(--surface);
+      margin-top:8px;
+    }
+    .foot-in{
+      max-width:var(--maxw); margin:0 auto; padding:22px 24px;
+      display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+      font-size:12.5px; color:var(--muted);
+    }
+    .foot-flow{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+    .foot-trust{display:flex; align-items:center; gap:16px; flex-wrap:wrap}
+    .trust{display:inline-flex; align-items:center; gap:6px; color:var(--text-2); font-weight:600}
+
+    .spinner{
+      width:14px; height:14px; border-radius:50%;
+      border:2px solid rgba(255,255,255,.45); border-top-color:#fff;
+      animation:spin .7s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @media (prefers-reduced-motion:reduce){
+      *{animation-duration:.01ms !important; transition-duration:.01ms !important}
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="appbar">
+    <div class="appbar-in">
+      <div class="brand">
+        <img class="brand-logo" src="/logo/guru-imob-logo.png" alt="Guru Imob - Monitore preços de imóveis" />
+        <span class="sr-only">Guru Imob - Monitor de preços de imóveis</span>
+      </div>
+      <div class="appbar-actions">
+        <span class="pill" id="userChip" hidden title="Workspace ativo">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+          </svg>
+          <span id="userName"></span>
+        </span>
+        <span class="pill" title="Sua sessão está autenticada">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          Sessão protegida
+        </span>
+        <a id="btnPortais" class="btn btn-ghost" href="/portais" title="Veja os sites que o Guru Imob monitora para você">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/><path d="M10 10h.01"/><path d="M14 10h.01"/>
+          </svg>
+          Sites
+        </a>
+        <button id="btnConfig" class="btn btn-ghost" type="button" title="Configurações da conta">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9c.14.53.6.92 1.15 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          Configurações
+        </button>
+        <button id="btnSuporte" class="btn btn-ghost" type="button" title="Reporte um problema ou peça uma melhoria">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>
+          </svg>
+          Suporte
+        </button>
+        <button id="btnLogout" class="btn btn-ghost" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>
+          </svg>
+          Sair
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <!-- ===== Captura ===== -->
+    <section class="card" aria-labelledby="t-captura">
+      <div class="card-head">
+        <h2 id="t-captura">Nova captura</h2>
+        <p class="card-sub">Informe a URL de busca do portal e, se quiser, o teto de R$/m². Os imóveis são gravados no seu banco local sem duplicar.</p>
+      </div>
+      <div class="card-body">
+        <div class="form-grid">
+          <div class="span-2">
+            <label class="field" for="url">
+              <span class="field-label">URL de busca do portal</span>
+              <input id="url" type="text" inputmode="url" autocomplete="off" spellcheck="false"
+                     placeholder="Cole aqui a URL filtrada de um portal suportado" />
+            </label>
+            <p class="hint">Cole exatamente a URL de resultados da busca que você usa no navegador.</p>
+          </div>
+
+          <label class="field" for="valor">
+            <span class="field-label">Teto de R$/m² <span class="opt">(opcional)</span></span>
+            <input id="valor" type="number" inputmode="decimal" min="0" step="100" placeholder="8500" />
+            <span class="hint">Equivalente ao <code>--valor-m2</code> do script.</span>
+          </label>
+
+          <label class="field" for="paginas">
+            <span class="field-label">Páginas a varrer</span>
+            <select id="paginas">
+              <option value="1">1 página</option>
+              <option value="2" selected>2 páginas</option>
+              <option value="3">3 páginas</option>
+              <option value="5">5 páginas</option>
+              <option value="10">10 páginas</option>
+              <option value="20">20 páginas</option>
+              <option value="50">50 páginas</option>
+            </select>
+            <span class="hint" id="paginasHint">Quanta profundidade varrer em cada portal.</span>
+          </label>
+
+          <label class="field" for="bairro">
+            <span class="field-label">Bairro, rua ou termo <span class="opt">(filtro do banco)</span></span>
+            <input id="bairro" type="text" autocomplete="off" placeholder="Saco dos Limões" />
+            <span class="hint">Busca nos imóveis já capturados — não interfere na nova captura.</span>
+          </label>
+
+          <label class="field" for="quartos">
+            <span class="field-label">Quartos <span class="opt">(mínimo)</span></span>
+            <input id="quartos" type="number" min="0" max="20" placeholder="2" />
+            <span class="hint">Mostra imóveis com este número de quartos ou mais.</span>
+          </label>
+
+          <div class="span-2">
+            <span class="field-label" id="lbl-quick">Filtros rápidos</span>
+            <div class="checks" role="group" aria-labelledby="lbl-quick">
+              <label class="check"><input id="soQueda" type="checkbox" /> Só quedas de preço</label>
+              <label class="check"><input id="semPreco" type="checkbox" /> Incluir imóveis sem preço</label>
+            </div>
+            <p class="hint">Queda de preço = valor atual menor que o último registrado para o mesmo anúncio.</p>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="btnBuscar" class="btn btn-primary" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+            </svg>
+            Buscar imóveis
+          </button>
+          <button id="btnFiltrar" class="btn" type="button" title="Reaplica os filtros ao banco, sem capturar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 5h18"/><path d="M6 12h12"/><path d="M10 19h4"/>
+            </svg>
+            Aplicar filtros
+          </button>
+          <span class="spacer"></span>
+          <button id="btnVarrer" class="btn btn-accent" type="button" title="Varre a URL já filtrada e calcula o preço médio do m² da região">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 3v18h18"/><path d="m7 15 3-4 3 3 4-6"/>
+            </svg>
+            Varrer região
+          </button>
+          <button id="btnExportar" class="btn" type="button" title="Envia os dados filtrados para a planilha configurada">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/>
+            </svg>
+            Exportar Sheets
+          </button>
+          <button id="dlFiltrados" class="btn" type="button" title="Baixa o CSV filtrado gerado a partir do banco">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>
+            </svg>
+            Baixar CSV
+          </button>
+          <button id="btnLimpar" class="btn btn-danger" type="button" title="Apaga todos os imóveis, o histórico de preços e os CSVs locais">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/>
+            </svg>
+            Limpar dados
+          </button>
+        </div>
+
+        <div id="mediaBox" class="media-box" hidden role="status" aria-live="polite"></div>
+
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- ===== Indicadores ===== -->
+    <section class="kpis" aria-label="Resumo do banco de imóveis">
+      <article class="kpi">
+        <span class="kpi-ico" aria-hidden="true">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><path d="M10 21v-6h4v6"/>
+          </svg>
+        </span>
+        <div>
+          <div class="kpi-val" id="kpiTotal">—</div>
+          <div class="kpi-lab">Imóveis no banco</div>
+        </div>
+      </article>
+      <article class="kpi">
+        <span class="kpi-ico" aria-hidden="true">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v20"/><path d="M17 6.5c0-1.9-2.2-3-5-3s-5 1.1-5 3 2.2 2.8 5 3.3 5 1.4 5 3.3-2.2 3-5 3-5-1.1-5-3"/>
+          </svg>
+        </span>
+        <div>
+          <div class="kpi-val" id="kpiPreco">—</div>
+          <div class="kpi-lab">Com preço calculável</div>
+        </div>
+      </article>
+      <article class="kpi k-accent">
+        <span class="kpi-ico" aria-hidden="true">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 7 6 6 4-4 8 8"/><path d="M21 17v-6h-6"/>
+          </svg>
+        </span>
+        <div>
+          <div class="kpi-val" id="kpiQuedas">—</div>
+          <div class="kpi-lab">Quedas de preço</div>
+        </div>
+      </article>
+      <article class="kpi k-warn">
+        <span class="kpi-ico" aria-hidden="true">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3v18"/><path d="M17 8h-6a3 3 0 0 0 0 6h2a3 3 0 0 1 0 6H7"/>
+          </svg>
+        </span>
+        <div>
+          <div class="kpi-val" id="kpiNovos">—</div>
+          <div class="kpi-lab" title="Imóveis capturados que ainda não registraram nenhuma mudança de preço">Novos sem alteração</div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ===== Alertas & notificações ===== -->
+    <section class="card" aria-labelledby="t-alertas">
+      <div class="card-head">
+        <h2 id="t-alertas">Alertas de queda de preço</h2>
+        <p class="card-sub">
+          Cadastre um teto de <strong>R$/m²</strong> para cada imóvel na coluna “Alerta” da tabela.
+          Quando o R$/m² do anúncio ficar <strong>igual ou menor</strong> que o alvo, o alerta
+          aparece aqui nesta lista.
+        </p>
+      </div>
+      <div class="card-body">
+        <div class="alert-grid sem-wa">
+          <div class="is-hidden">
+            <span class="field-label">Notificações no WhatsApp</span>
+            <p id="whatsResumo" class="cfg-resumo vazio">Nenhum número cadastrado.</p>
+            <div class="cfg-actions" style="margin-top:14px">
+              <button id="btnAbrirConfig" class="btn" type="button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>
+                </svg>
+                Abrir configurações
+              </button>
+            </div>
+            <p class="hint">O número é único por conta e fica salvo no seu workspace. Informe DDD + número — o código do Brasil (55) é adicionado automaticamente.</p>
+          </div>
+
+          <div>
+            <div class="notif-head">
+              <span class="field-label" style="margin:0">Notificações disparadas</span>
+              <span style="display:flex; align-items:center; gap:10px">
+                <span class="count-badge" id="notifCount" aria-live="polite">0</span>
+                <button id="btnNotifLimpar" class="btn btn-ghost" type="button" title="Apaga o histórico de notificações">
+                  Limpar
+                </button>
+              </span>
+            </div>
+            <div class="notif-list" id="notifList"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Tabela ===== -->
+    <section class="card" aria-labelledby="t-imoveis">
+      <div class="table-tools">
+        <h2 id="t-imoveis">
+          Imóveis monitorados
+          <span class="count-badge" id="meta" aria-live="polite">0</span>
+        </h2>
+        <p class="hint" style="margin:0">Clique no título de uma coluna para ordenar.</p>
+      </div>
+      <div class="table-wrap" id="tableWrap">
+        <table id="tbl" aria-labelledby="t-imoveis"></table>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== Modal: configurações da conta ===== -->
+  <dialog id="modalConfig" class="modal" aria-labelledby="cfgTitle">
+    <div class="modal-card">
+      <header class="modal-head">
+        <div>
+          <h2 id="cfgTitle">Configurações da conta</h2>
+          <p class="card-sub">Atualize seus dados e o destino das notificações.</p>
+        </div>
+        <button id="btnFecharConfig" class="btn-x" type="button" aria-label="Fechar configurações">&times;</button>
+      </header>
+
+      <div class="modal-body">
+        <section class="cfg-sec">
+          <h3 class="cfg-h">Perfil</h3>
+          <div class="form-grid">
+            <label class="field" for="cfgNome">
+              <span class="field-label">Nome</span>
+              <input id="cfgNome" type="text" autocomplete="name" placeholder="Seu nome" />
+            </label>
+            <label class="field" for="cfgEmail">
+              <span class="field-label">E-mail</span>
+              <input id="cfgEmail" type="email" autocomplete="email" placeholder="voce@exemplo.com" />
+            </label>
+          </div>
+          <div class="cfg-actions">
+            <button id="btnSalvarPerfil" class="btn btn-primary" type="button">Salvar perfil</button>
+            <span id="cfgPerfilStatus" class="status" role="status" aria-live="polite"></span>
+          </div>
+        </section>
+
+        <hr class="cfg-sep is-hidden" />
+
+        <section class="cfg-sec is-hidden">
+          <h3 class="cfg-h">WhatsApp para notificações</h3>
+          <label class="field" for="cfgWhats">
+            <span class="field-label">Número <span class="opt">(com DDD)</span></span>
+            <input id="cfgWhats" type="tel" inputmode="tel" autocomplete="tel" placeholder="(48) 99999-0000" />
+          </label>
+          <div class="cfg-actions">
+            <button id="btnSalvarWhatsCfg" class="btn btn-primary" type="button">Salvar WhatsApp</button>
+            <button id="btnTestarWhatsCfg" class="btn btn-ghost" type="button">Enviar teste</button>
+            <span id="cfgWhatsStatus" class="status" role="status" aria-live="polite"></span>
+          </div>
+        </section>
+
+        <hr class="cfg-sep" />
+
+        <section class="cfg-sec">
+          <h3 class="cfg-h">Segurança</h3>
+          <div class="form-grid">
+            <label class="field span-2" for="cfgAtual">
+              <span class="field-label">Senha atual</span>
+              <input id="cfgAtual" type="password" autocomplete="current-password" placeholder="••••••••" />
+            </label>
+            <label class="field" for="cfgNova">
+              <span class="field-label">Nova senha</span>
+              <input id="cfgNova" type="password" autocomplete="new-password" placeholder="mínimo 6 caracteres" />
+            </label>
+            <label class="field" for="cfgConfirma">
+              <span class="field-label">Confirmar nova senha</span>
+              <input id="cfgConfirma" type="password" autocomplete="new-password" placeholder="repita a nova senha" />
+            </label>
+          </div>
+          <div class="cfg-actions">
+            <button id="btnSalvarSenha" class="btn btn-primary" type="button">Alterar senha</button>
+            <span id="cfgSenhaStatus" class="status" role="status" aria-live="polite"></span>
+          </div>
+        </section>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ===== Modal: suporte ===== -->
+  <dialog id="modalSuporte" class="modal" aria-labelledby="supTitle">
+    <div class="modal-card">
+      <header class="modal-head">
+        <div>
+          <h2 id="supTitle">Fale com o suporte</h2>
+          <p class="card-sub">Reporte um problema, peça uma melhoria ou sugira um novo site para monitorarmos.</p>
+        </div>
+        <button id="btnFecharSuporte" class="btn-x" type="button" aria-label="Fechar suporte">&times;</button>
+      </header>
+
+      <div class="modal-body">
+        <section class="cfg-sec">
+          <h3 class="cfg-h">O que você precisa?</h3>
+          <div class="form-grid">
+            <label class="field" for="supTipo">
+              <span class="field-label">Tipo de pedido</span>
+              <select id="supTipo">
+                <option value="bug">Reportar um problema (bug)</option>
+                <option value="melhoria">Pedir uma melhoria</option>
+                <option value="site">Sugerir um novo site</option>
+              </select>
+            </label>
+            <label class="field" for="supAssunto">
+              <span class="field-label">Assunto</span>
+              <input id="supAssunto" type="text" maxlength="120" placeholder="Resuma em poucas palavras" />
+            </label>
+          </div>
+          <label class="field" for="supMensagem">
+            <span class="field-label">Detalhes</span>
+            <textarea id="supMensagem" rows="5" maxlength="5000"
+                      placeholder="Conte o que aconteceu ou o que você gostaria de ver no Guru Imob."></textarea>
+          </label>
+          <p class="hint" id="supHint" hidden></p>
+          <div class="cfg-actions">
+            <button id="btnEnviarSuporte" class="btn btn-primary" type="button">Enviar pedido</button>
+            <span id="supStatus" class="status" role="status" aria-live="polite"></span>
+          </div>
+        </section>
+      </div>
+    </div>
+  </dialog>
+
+  <footer>
+    <div class="foot-in">
+      <div class="foot-flow">
+        <strong style="color:var(--text-2)">Fluxo:</strong>
+        <span>Buscar imóveis</span><span aria-hidden="true">→</span>
+        <span>Banco local (SQLite, sem duplicar)</span><span aria-hidden="true">→</span>
+        <span>Análise por R$/m²</span><span aria-hidden="true">→</span>
+        <span>Exportar Sheets</span>
+      </div>
+      <div class="foot-trust">
+        <span class="trust">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          Dados no seu servidor
+        </span>
+        <span class="trust">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>
+          </svg>
+          Histórico preservado
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ---------- utilidades ---------- */
+    const esc = v => (v ?? '').toString()
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+
+    function primeiroNumeroBR(v){
+      const m = (v ?? '').toString().match(/\d+(?:[.,]\d+)*/g);
+      if (!m) return null;
+      let t = m[0];
+      if (t.includes(',') && t.includes('.')) t = t.replace(/\./g,'').replace(',','.');
+      else if (t.includes(',')) t = t.replace(',','.');
+      else { const p = t.split('.'); if (p.length > 1 && p[p.length-1].length === 3) t = p.join(''); }
+      const n = parseFloat(t);
+      return isFinite(n) ? n : null;
+    }
+    function fmtAlertaInput(v){
+      const n = Number(v);
+      if (!isFinite(n)) return '';
+      return n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    function normalizarAlertaDigitado(v){
+      return (v ?? '').toString().replace(/\D+/g, '');
+    }
+    function mascaraAlertaDigitado(v){
+      const limpo = normalizarAlertaDigitado(v);
+      if (!limpo) return '';
+      return (Number(limpo) / 100).toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+    function alertaParaEnvio(v){
+      const limpo = normalizarAlertaDigitado(v);
+      if (!limpo) return '';
+      return (Number(limpo) / 100).toFixed(2);
+    }
+    const brl = n => n == null ? '' : n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+    const texto = v => { const s = (v ?? '').toString().trim(); return (!s || s.toLowerCase() === 'nan') ? '' : s; };
+
+    function primeiraImagem(raw){
+      if (!raw) return '';
+      try{ const a = JSON.parse(raw); if (Array.isArray(a) && a.length) return a[0]; }catch(e){}
+      const m = String(raw).match(/https?:\/\/[^'"\]\s]+/);
+      return m ? m[0] : '';
+    }
+
+    /* ---------- colunas ---------- */
+    const COLS = [
+      { key:'foto',        label:'Foto',              sort:null       },
+      { key:'titulo',      label:'Imóvel',            sort:'titulo'   },
+      { key:'valor',       label:'Valor / R$ por m²', sort:'valor_m2' },
+      { key:'area',        label:'Área',              sort:'area'     },
+      { key:'quartos',     label:'Quartos',           sort:'quartos'  },
+      { key:'banheiros',   label:'Banheiros',         sort:null       },
+      { key:'vagas',       label:'Vagas',             sort:null       },
+      { key:'localizacao', label:'Localização',       sort:null       },
+      { key:'alerta',      label:'Alerta R$/m²',      sort:null       },
+      { key:'link',        label:'Anúncio',           sort:null       },
+      { key:'acoes',       label:'Ações',             sort:null       },
+    ];
+
+    function badges(it){
+      const b = [];
+      if (it.novo) b.push('<span class="badge new">Novo</span>');
+      if (it.variacao != null && it.variacao < 0)
+        b.push(`<span class="badge drop">▼ ${brl(Math.abs(it.variacao))}</span>`);
+      return b.join('');
+    }
+
+    function celula(col, it){
+      switch (col.key){
+        case 'foto': {
+          const img = primeiraImagem(it.imagens);
+          if (!img) return '<span class="tag-soft">—</span>';
+          return `<a href="${esc(it.url)}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+                    <img class="thumb" src="${esc(img)}" loading="lazy" referrerpolicy="no-referrer" alt=""
+                         onerror="this.style.visibility='hidden'" />
+                  </a>`;
+        }
+        case 'titulo':
+          return `${badges(it)}<span class="title-txt">${esc(texto(it.titulo)) || 'Sem título'}</span>`;
+        case 'valor': {
+          const n = it.preco_num != null ? it.preco_num : primeiroNumeroBR(it.preco);
+          if (n == null) return '<span class="tag-soft">Sem preço</span>';
+          const vm2 = it.valor_m2 != null ? it.valor_m2 : null;
+          return `<span class="money">${brl(n)}</span>` +
+                 (vm2 != null ? `<br><span class="vm2">${brl(vm2)}/m²</span>` : '');
+        }
+        case 'area':
+          return `<span class="tag-soft">${esc(texto(it.area)) || '—'}</span>`;
+        case 'quartos':
+          return `<span class="tag-soft num">${esc(texto(it.quartos)) || '—'}</span>`;
+        case 'banheiros':
+          return `<span class="tag-soft num">${esc(texto(it.banheiros)) || '—'}</span>`;
+        case 'vagas':
+          return `<span class="tag-soft num">${esc(texto(it.vagas)) || '—'}</span>`;
+        case 'localizacao': {
+          const loc = [texto(it.rua), texto(it.localizacao)].filter(Boolean).join(' · ');
+          return `<span class="loc-txt">${esc(loc) || '—'}</span>`;
+        }
+        case 'alerta': {
+          const alvo = it.alerta_m2 != null ? fmtAlertaInput(it.alerta_m2) : '';
+          const cls = it.alerta_disparado ? 'fired' : (it.alerta_m2 != null ? 'armed' : '');
+          const temAlerta = it.alerta_m2 != null;
+          const estado = it.alerta_disparado
+            ? '<span class="alert-state hit">● Disparado</span>'
+            : (it.alerta_m2 != null
+                ? '<span class="alert-state on">● Monitorando</span>'
+                : '<span class="alert-state off">Sem alerta</span>');
+          return `<div class="alert-cell">
+                    <div class="alert-money ${cls}">
+                      <span class="alert-prefix">R$</span>
+                      <input class="alert-input" type="text" inputmode="numeric" autocomplete="off"
+                             value="${esc(alvo)}" placeholder="0,00"
+                             data-alert-input="${esc(it.url)}"
+                             title="${alvo ? `Alerta configurado em ${alvo} R$/m²` : 'Defina o teto de R$/m² para monitorar este imóvel'}"
+                             maxlength="16"
+                             aria-label="Teto de R$/m² de alerta para ${esc(texto(it.titulo) || 'este imóvel')}">
+                    </div>
+                    <div class="alert-actions">
+                      <button class="btn-alert" type="button" data-alerta="${esc(it.url)}"
+                              title="Salvar alerta de R$/m²" aria-label="Salvar alerta de R$/m²">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <path d="M20 6 9 17l-5-5"/>
+                        </svg>
+                      </button>
+                      <button class="btn-alert remove" type="button" data-alerta-remover="${esc(it.url)}"
+                              title="Remover alerta deste imóvel" aria-label="Remover alerta deste imóvel"${temAlerta ? '' : ' disabled'}>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>${estado}`;
+        }
+        case 'link':
+          return it.url
+            ? `<a class="link-anuncio" href="${esc(it.url)}" target="_blank" rel="noopener">Ver anúncio
+                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                   <path d="M7 17 17 7"/><path d="M8 7h9v9"/>
+                 </svg></a>`
+            : '—';
+        case 'acoes': {
+          const nome = texto(it.titulo) || 'este imóvel';
+          return `<button class="btn-del" type="button" data-del="${esc(it.url)}"
+                    title="Remover do monitoramento" aria-label="Remover ${esc(nome)} do monitoramento">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/>
+                      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/>
+                    </svg>
+                  </button>`;
+        }
+        default: return '—';
+      }
+    }
+
+    /* ---------- estado ---------- */
+    const state = { itens:[], ordenar:'valor_m2', ordem:'asc', user:null };
+
+    function fmtWhats(n){
+      const d = (n || '').replace(/\D/g, '');
+      if (d.length === 13) return `+${d.slice(0,2)} (${d.slice(2,4)}) ${d.slice(4,9)}-${d.slice(9)}`;
+      if (d.length === 12) return `+${d.slice(0,2)} (${d.slice(2,4)}) ${d.slice(4,8)}-${d.slice(8)}`;
+      return d ? '+' + d : '';
+    }
+
+    function renderWhatsResumo(numero){
+      const box = el.whatsResumo;
+      if (!box) return;
+      if (numero){
+        box.className = 'cfg-resumo';
+        box.innerHTML = `Notificando para <strong>${esc(fmtWhats(numero))}</strong>`;
+      } else {
+        box.className = 'cfg-resumo vazio';
+        box.textContent = 'Nenhum número cadastrado — abra as configurações para receber os alertas.';
+      }
+    }
+
+    const el = {
+      url:        document.querySelector('#url'),
+      valor:      document.querySelector('#valor'),
+      paginas:    document.querySelector('#paginas'),
+      paginasHint:document.querySelector('#paginasHint'),
+      bairro:     document.querySelector('#bairro'),
+      quartos:    document.querySelector('#quartos'),
+      soQueda:    document.querySelector('#soQueda'),
+      semPreco:   document.querySelector('#semPreco'),
+      btnBuscar:  document.querySelector('#btnBuscar'),
+      btnFiltrar: document.querySelector('#btnFiltrar'),
+      btnVarrer:  document.querySelector('#btnVarrer'),
+      btnExportar:document.querySelector('#btnExportar'),
+      btnLogout:  document.querySelector('#btnLogout'),
+      dlFiltrados:document.querySelector('#dlFiltrados'),
+      btnLimpar:  document.querySelector('#btnLimpar'),
+      status:     document.querySelector('#status'),
+      mediaBox:   document.querySelector('#mediaBox'),
+      tbl:        document.querySelector('#tbl'),
+      meta:       document.querySelector('#meta'),
+      kpiTotal:   document.querySelector('#kpiTotal'),
+      kpiPreco:   document.querySelector('#kpiPreco'),
+      kpiQuedas:  document.querySelector('#kpiQuedas'),
+      kpiNovos:   document.querySelector('#kpiNovos'),
+      whatsResumo:document.querySelector('#whatsResumo'),
+      btnAbrirConfig: document.querySelector('#btnAbrirConfig'),
+      notifCount: document.querySelector('#notifCount'),
+      notifList:  document.querySelector('#notifList'),
+      btnNotifLimpar: document.querySelector('#btnNotifLimpar'),
+      btnConfig:  document.querySelector('#btnConfig'),
+      modalConfig:document.querySelector('#modalConfig'),
+      btnFecharConfig: document.querySelector('#btnFecharConfig'),
+      cfgNome:    document.querySelector('#cfgNome'),
+      cfgEmail:   document.querySelector('#cfgEmail'),
+      cfgPerfilStatus: document.querySelector('#cfgPerfilStatus'),
+      btnSalvarPerfil: document.querySelector('#btnSalvarPerfil'),
+      cfgWhats:   document.querySelector('#cfgWhats'),
+      cfgWhatsStatus: document.querySelector('#cfgWhatsStatus'),
+      btnSalvarWhatsCfg: document.querySelector('#btnSalvarWhatsCfg'),
+      btnTestarWhatsCfg: document.querySelector('#btnTestarWhatsCfg'),
+      cfgAtual:   document.querySelector('#cfgAtual'),
+      cfgNova:    document.querySelector('#cfgNova'),
+      cfgConfirma:document.querySelector('#cfgConfirma'),
+      cfgSenhaStatus: document.querySelector('#cfgSenhaStatus'),
+      btnSalvarSenha: document.querySelector('#btnSalvarSenha'),
+      btnSuporte: document.querySelector('#btnSuporte'),
+      modalSuporte: document.querySelector('#modalSuporte'),
+      btnFecharSuporte: document.querySelector('#btnFecharSuporte'),
+      supTipo: document.querySelector('#supTipo'),
+      supAssunto: document.querySelector('#supAssunto'),
+      supMensagem: document.querySelector('#supMensagem'),
+      supHint: document.querySelector('#supHint'),
+      supStatus: document.querySelector('#supStatus'),
+      btnEnviarSuporte: document.querySelector('#btnEnviarSuporte'),
+    };
+
+    function chip(text, tipo){
+      const s = document.createElement('span');
+      s.className = `chip ${tipo || 'ok'}`;
+      s.textContent = text;
+      return s;
+    }
+    const limparStatus = () => { el.status.innerHTML = ''; };
+    const addStatus = (t, tipo) => el.status.appendChild(chip(t, tipo));
+    const addStatusEm = (box, t, tipo) => { box.innerHTML = ''; box.appendChild(chip(t, tipo)); };
+    const carregando = (on) => el.tbl.setAttribute('aria-busy', on ? 'true' : 'false');
+
+    function renderKpis(stats){
+      if (!stats) return;
+      el.kpiTotal.textContent  = stats.total     ?? '—';
+      el.kpiPreco.textContent  = stats.com_preco ?? '—';
+      el.kpiQuedas.textContent = stats.quedas    ?? '—';
+      el.kpiNovos.textContent  = stats.novos     ?? '—';
+    }
+
+    /* ---------- varredura de região (R$/m²) ---------- */
+    function renderMedia(j){
+      el.mediaBox.hidden = false;
+      if (!j.amostra){
+        el.mediaBox.innerHTML =
+          `<div class="media-empty">
+             <strong>Nenhum R$/m² calculável nesta varredura.</strong>
+             Foram capturados ${j.capturados ?? 0} imóveis, mas nenhum trouxe preço e área ao mesmo tempo.
+           </div>`;
+        return;
+      }
+      el.mediaBox.innerHTML =
+        `<span class="media-ico" aria-hidden="true">
+           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+             <path d="M3 3v18h18"/><path d="m7 15 3-4 3 3 4-6"/>
+           </svg>
+         </span>
+         <div>
+           <div class="media-lab">Preço médio do m² na região</div>
+           <div class="media-val">${brl(j.media)}<span class="media-unit">/m²</span></div>
+         </div>
+         <div class="media-meta">
+           <span>Mediana: <strong>${brl(j.mediana)}/m²</strong></span>
+           <span>Faixa: <strong>${brl(j.minimo)} – ${brl(j.maximo)}/m²</strong></span>
+           <span>Amostra: <strong>${j.amostra}</strong> de ${j.capturados} capturados</span>
+         </div>`;
+    }
+
+    /* ---------- portais (inteligência de varredura) ---------- */
+    const PORTAL_PADRAO = { nome:'Portal não identificado', rolagens_por_pagina:12 };
+    let PORTAIS = [];
+
+    async function carregarPortais(){
+      try{
+        const r = await fetch('/api/portais');
+        const j = await r.json();
+        if (r.ok && j.ok) PORTAIS = j.portais || [];
+      } catch(e){ /* usa o padrão */ }
+      atualizarHintPaginas();
+    }
+
+    function portalDaUrl(url){
+      const u = (url || '').toLowerCase();
+      return PORTAIS.find(p => u.includes(p.chave)) || PORTAL_PADRAO;
+    }
+
+    function atualizarHintPaginas(){
+      const portal = portalDaUrl(el.url.value.trim());
+      const paginas = Number(el.paginas.value) || 1;
+      el.paginasHint.textContent =
+        `≈ ${paginas * portal.rolagens_por_pagina} rolagens em ${portal.nome} ` +
+        `(${paginas} × ${portal.rolagens_por_pagina}).`;
+    }
+
+    el.url.addEventListener('input', atualizarHintPaginas);
+    el.paginas.addEventListener('change', atualizarHintPaginas);
+
+    /* ---------- sessão ---------- */
+    async function checkSession(){
+      try{
+        const r = await fetch('/api/session');
+        const j = await r.json();
+        if (!j.logged){ window.location = '/'; return false; }
+        if (j.user){
+          state.user = j.user;
+          const chip = document.querySelector('#userChip');
+          const alvo = document.querySelector('#userName');
+          if (chip && alvo){
+            alvo.textContent = j.user.nome || j.user.email || '';
+            chip.hidden = false;
+          }
+          el.cfgNome.value  = j.user.nome  || '';
+          el.cfgEmail.value = j.user.email || '';
+          el.cfgWhats.value = j.user.whatsapp || '';
+          renderWhatsResumo(j.user.whatsapp);
+        }
+        return true;
+      } catch(e){ return false; }
+    }
+
+    /* ---------- render ---------- */
+    function render(itens){
+      state.itens = itens || [];
+      const cols = COLS;
+
+      const ths = cols.map(c => {
+        const cls = c.key === 'acoes' ? ' class="th-acoes"' : (c.key === 'alerta' ? ' class="th-alerta"' : '');
+        if (!c.sort) return `<th scope="col"${cls}>${esc(c.label)}</th>`;
+        const ativo = c.sort === state.ordenar;
+        const aria = ativo ? (state.ordem === 'asc' ? 'ascending' : 'descending') : null;
+        return `<th scope="col" class="sortable" data-sort="${c.sort}" tabindex="0" role="button"
+                    title="Ordenar por ${esc(c.label)}"${aria ? ` aria-sort="${aria}"` : ''}>${esc(c.label)}</th>`;
+      }).join('');
+
+      if (!state.itens.length){
+        el.tbl.innerHTML =
+          `<thead><tr>${ths}</tr></thead>
+           <tbody><tr><td colspan="${cols.length}">
+             <div class="empty">
+               <strong>Nenhum imóvel encontrado</strong>
+               Faça uma captura no portal ou ajuste os filtros acima.
+             </div>
+           </td></tr></tbody>`;
+        el.meta.textContent = '0';
+        return;
+      }
+
+      const trs = state.itens.map(it =>
+        `<tr>${cols.map(c => {
+          const cls = c.key === 'acoes' ? ' class="acoes"' : '';
+          return `<td${cls}>${celula(c, it)}</td>`;
+        }).join('')}</tr>`
+      ).join('');
+      el.tbl.innerHTML = `<thead><tr>${ths}</tr></thead><tbody>${trs}</tbody>`;
+      el.meta.textContent = String(state.itens.length);
+    }
+
+    /* ---------- dados ---------- */
+    function paramsFiltro(){
+      const p = new URLSearchParams();
+      const vm2 = el.valor.value.trim();
+      if (vm2) p.set('valor_m2', vm2.replace(',', '.'));
+      const b = el.bairro.value.trim();
+      if (b) p.set('bairro', b);
+      const q = el.quartos.value.trim();
+      if (q) p.set('quartos', q);
+      if (el.soQueda.checked) p.set('so_queda', '1');
+      if (el.semPreco.checked) p.set('com_preco', '0');
+      p.set('ordenar', state.ordenar);
+      p.set('ordem', state.ordem);
+      return p.toString();
+    }
+
+    async function carregarImoveis(){
+      carregando(true);
+      try{
+        const r = await fetch(`/api/imoveis?${paramsFiltro()}&t=${Date.now()}`);
+        if (r.status === 401){ window.location = '/'; return null; }
+        const j = await r.json();
+        if (!r.ok || !j.ok) throw new Error(j.error || 'erro');
+        render(j.itens);
+        renderKpis(j.stats);
+        return j;
+      } catch(e){
+        addStatus('Não foi possível carregar o banco de imóveis.', 'fail');
+        console.error(e);
+        return null;
+      } finally {
+        carregando(false);
+      }
+    }
+
+    /* ---------- eventos ---------- */
+    el.btnLogout.addEventListener('click', async ()=>{
+      try{ await fetch('/api/logout', {method:'POST'}); }catch(e){}
+      window.location = '/';
+    });
+
+    el.url.addEventListener('keydown', e => { if (e.key === 'Enter') el.btnBuscar.click(); });
+
+    el.btnBuscar.addEventListener('click', async ()=>{
+      const url = el.url.value.trim();
+      if (!url){
+        limparStatus();
+        addStatus('Informe a URL de busca do portal para iniciar a captura.', 'info');
+        el.url.focus();
+        return;
+      }
+      el.btnBuscar.disabled = true;
+      el.btnBuscar.innerHTML = '<span class="spinner"></span> Capturando…';
+      limparStatus();
+      addStatus('Captura em andamento. Isso pode levar alguns minutos…', 'info');
+      try{
+        const v = el.valor.value.trim();
+        const paginas = el.paginas.value || '2';
+        const resp = await fetch(`/api/capturar?url=${encodeURIComponent(url)}&valor_m2=${encodeURIComponent(v)}&paginas=${paginas}`);
+        if (!resp.ok){
+          const err = await resp.json().catch(()=>({}));
+          limparStatus();
+          addStatus('Falha na captura: ' + (err.error || 'erro desconhecido'), 'fail');
+          return;
+        }
+        const data = await resp.json();
+        limparStatus();
+        addStatus(`${data.portal} · ${data.paginas} pág. (${data.rolagens} rolagens)`, 'info');
+        addStatus(`Capturados: ${data.capturados}`, data.capturados ? 'ok' : 'info');
+        addStatus(`Com preço: ${data.filtrados}`, data.filtrados ? 'ok' : 'info');
+        if (data.novos)  addStatus(`Novos: ${data.novos}`, 'ok');
+        if (data.quedas) addStatus(`Quedas de preço: ${data.quedas}`, 'ok');
+        if (data.alertas) addStatus(`Alertas disparados: ${data.alertas}`, 'info');
+        await carregarImoveis();
+        carregarNotificacoes();
+        addStatus('Captura concluída', 'ok');
+      } catch(e){
+        limparStatus();
+        addStatus('Erro de rede ou servidor. Tente novamente.', 'fail');
+        console.error(e);
+      } finally {
+        el.btnBuscar.disabled = false;
+        el.btnBuscar.innerHTML =
+          '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg> Buscar imóveis';
+      }
+    });
+
+    el.btnFiltrar.addEventListener('click', async ()=>{
+      limparStatus();
+      const j = await carregarImoveis();
+      if (j) addStatus(`Filtros aplicados — ${j.total} imóveis listados`, 'ok');
+    });
+
+    /* ---------- varrer região (preço médio do m²) ---------- */
+    el.btnVarrer.addEventListener('click', async ()=>{
+      const url = el.url.value.trim();
+      if (!url){
+        limparStatus();
+        addStatus('Informe a URL de busca (já filtrada) do portal para varrer a região.', 'info');
+        el.url.focus();
+        return;
+      }
+      el.btnVarrer.disabled = true;
+      el.btnVarrer.innerHTML = '<span class="spinner"></span> Varrendo…';
+      limparStatus();
+      addStatus('Varredura da região em andamento. Isso pode levar alguns minutos…', 'info');
+      try{
+        const paginas = Number(el.paginas.value) || 2;
+        const r = await fetch('/api/varrer', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ url, paginas })
+        });
+        const j = await r.json();
+        if (!r.ok || !j.ok){
+          limparStatus();
+          addStatus('Falha na varredura: ' + (j.error || 'erro desconhecido'), 'fail');
+          return;
+        }
+        limparStatus();
+        renderMedia(j);
+        if (j.amostra){
+          addStatus(`${j.portal} · ${j.paginas} pág. (${j.rolagens} rolagens)`, 'info');
+          addStatus(`Varredura concluída — ${j.amostra} imóveis com preço e área`, 'ok');
+        } else {
+          addStatus('Nenhum imóvel com preço e área foi encontrado.', 'info');
+        }
+      } catch(e){
+        limparStatus();
+        addStatus('Erro de rede ou servidor na varredura.', 'fail');
+        console.error(e);
+      } finally {
+        el.btnVarrer.disabled = false;
+        el.btnVarrer.innerHTML =
+          '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 15 3-4 3 3 4-6"/></svg> Varrer região';
+      }
+    });
+
+    /* ---------- exclusão de imóvel ---------- */
+    el.tbl.addEventListener('click', async e => {
+      const btn = e.target.closest('[data-del]');
+      if (!btn) return;
+
+      const url = btn.dataset.del;
+      const ok = confirm(
+        'Remover este imóvel do monitoramento?\n\n' +
+        'Ele sai da lista e é ignorado nas próximas capturas.\n' +
+        'O histórico de preços já registrado é mantido no banco.'
+      );
+      if (!ok) return;
+
+      btn.disabled = true;
+      try{
+        const r = await fetch('/api/excluir', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ url })
+        });
+        const j = await r.json();
+        if (!r.ok || !j.ok) throw new Error(j.error || 'erro');
+        render(state.itens.filter(it => it.url !== url));
+        renderKpis(j.stats);
+        limparStatus();
+        addStatus('Imóvel removido do monitoramento.', 'ok');
+      } catch(err){
+        btn.disabled = false;
+        limparStatus();
+        addStatus('Não foi possível remover o imóvel.', 'fail');
+        console.error(err);
+      }
+    });
+
+    async function ordenarPor(key){
+      if (state.ordenar === key) state.ordem = state.ordem === 'asc' ? 'desc' : 'asc';
+      else { state.ordenar = key; state.ordem = 'asc'; }
+      await carregarImoveis();
+    }
+    el.tbl.addEventListener('click', e => {
+      const th = e.target.closest('th.sortable');
+      if (th) ordenarPor(th.dataset.sort);
+    });
+    el.tbl.addEventListener('keydown', e => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      const th = e.target.closest('th.sortable');
+      if (th){ e.preventDefault(); ordenarPor(th.dataset.sort); }
+    });
+
+    el.btnExportar.addEventListener('click', async ()=>{
+      if (!state.itens.length){
+        addStatus('Não há imóveis listados para exportar.', 'info');
+        return;
+      }
+      el.btnExportar.disabled = true;
+      addStatus('Enviando para o Google Sheets…', 'info');
+      try{
+        const r = await fetch('/api/exportar-sheets', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ sheet_name:'Imoveis Filtrados' })
+        });
+        const j = await r.json();
+        if (r.ok && j.ok) addStatus('Exportação concluída com sucesso.', 'ok');
+        else addStatus('Falha na exportação: ' + (j.msg || j.error || 'erro'), 'fail');
+      } catch(e){
+        addStatus('Erro de conexão ao exportar.', 'fail');
+        console.error(e);
+      } finally {
+        el.btnExportar.disabled = false;
+      }
+    });
+
+    el.dlFiltrados.addEventListener('click', ()=>{
+      window.open('/api/csv/imoveis_filtrados.csv', '_blank');
+    });
+
+    el.btnLimpar.addEventListener('click', async ()=>{
+      const confirmado = confirm(
+        'Limpar todos os dados?\n\n' +
+        'Serão apagados:\n' +
+        '• todos os imóveis do banco\n' +
+        '• todo o histórico de preços\n' +
+        '• os arquivos CSV locais\n\n' +
+        'Esta ação não pode ser desfeita.'
+      );
+      if (!confirmado) return;
+
+      el.btnLimpar.disabled = true;
+      limparStatus();
+      addStatus('Limpando dados locais…', 'info');
+      try{
+        const r = await fetch('/api/limpar', { method:'POST' });
+        const j = await r.json();
+        limparStatus();
+        if (r.ok && j.ok){
+          addStatus('Dados limpos. Banco e planilhas zerados.', 'ok');
+          el.mediaBox.hidden = true;
+          await carregarImoveis();
+          carregarNotificacoes();
+        } else {
+          addStatus('Falha ao limpar: ' + (j.error || 'erro desconhecido'), 'fail');
+        }
+      } catch(e){
+        limparStatus();
+        addStatus('Erro de conexão ao limpar os dados.', 'fail');
+        console.error(e);
+      } finally {
+        el.btnLimpar.disabled = false;
+      }
+    });
+
+    /* ---------- alertas de R$/m² & notificações ---------- */
+    function fmtData(v){
+      const m = (v || '').toString().match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/);
+      return m ? `${m[3]}/${m[2]}/${m[1]} ${m[4]}:${m[5]}` : (v || '');
+    }
+
+    function renderNotificacoes(j){
+      el.notifCount.textContent = String(j.total ?? 0);
+      renderWhatsResumo(j.whatsapp);
+
+      if (!j.itens || !j.itens.length){
+        el.notifList.innerHTML =
+          `<div class="notif-empty">
+             <strong>Nenhuma notificação ainda</strong>
+             Quando o R$/m² de um imóvel monitorado ficar igual ou menor que o teto cadastrado,
+             o alerta aparece aqui nesta lista.
+           </div>`;
+        return;
+      }
+
+      el.notifList.innerHTML = j.itens.map(n => {
+        return `<div class="notif">
+                  <div class="notif-main">
+                    <div class="notif-title">${esc(texto(n.titulo) || 'Imóvel monitorado')}</div>
+                    <div class="notif-meta">
+                      R$/m²: <strong>${brl(n.valor_m2)}</strong> · alvo ${brl(n.alerta_m2)} · anúncio ${brl(n.preco_num)}
+                    </div>
+                    <div class="notif-when">
+                      ${esc(fmtData(n.quando))}
+                    </div>
+                  </div>
+                </div>`;
+      }).join('');
+    }
+
+    async function carregarNotificacoes(){
+      try{
+        const r = await fetch(`/api/notificacoes?t=${Date.now()}`);
+        if (r.status === 401){ window.location = '/'; return null; }
+        const j = await r.json();
+        if (!r.ok || !j.ok) return null;
+        renderNotificacoes(j);
+        return j;
+      }catch(e){ console.error(e); return null; }
+    }
+
+    async function salvarAlerta(url, valor, btn){
+      valor = alertaParaEnvio(valor);
+      if (btn) btn.disabled = true;
+      try{
+        const r = await fetch('/api/alerta', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ url, valor_m2: valor })
+        });
+        const j = await r.json();
+        if (!r.ok || !j.ok){
+          limparStatus();
+          addStatus('Não foi possível salvar o alerta: ' + (j.msg || j.error || 'erro'), 'fail');
+          if (btn) btn.disabled = false;
+          return;
+        }
+        const it = state.itens.find(x => x.url === url);
+        if (it){ it.alerta_m2 = j.alerta_m2; it.alerta_disparado = false; }
+        renderKpis(j.stats);
+        render(state.itens);
+        limparStatus();
+        addStatus(j.alerta_m2 != null
+          ? `Alerta definido: ${brl(j.alerta_m2)}/m² — avisamos quando o anúncio ficar igual ou menor.`
+          : 'Alerta removido — o imóvel não será mais notificado.', 'ok');
+      }catch(e){
+        limparStatus();
+        addStatus('Erro de rede ao salvar o alerta.', 'fail');
+        console.error(e);
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    el.tbl.addEventListener('click', e => {
+      const btnRemover = e.target.closest('[data-alerta-remover]');
+      if (btnRemover){
+        const cell = btnRemover.closest('.alert-cell');
+        const input = cell ? cell.querySelector('[data-alert-input]') : null;
+        if (input) input.value = '';
+        salvarAlerta(btnRemover.dataset.alertaRemover, '', btnRemover);
+        return;
+      }
+      const btn = e.target.closest('[data-alerta]');
+      if (!btn) return;
+      const cell = btn.closest('.alert-cell');
+      const input = cell ? cell.querySelector('[data-alert-input]') : null;
+      salvarAlerta(btn.dataset.alerta, input ? input.value.trim() : '', btn);
+    });
+
+    el.tbl.addEventListener('input', e => {
+      const input = e.target.closest('[data-alert-input]');
+      if (!input) return;
+      const mascarado = mascaraAlertaDigitado(input.value);
+      if (input.value !== mascarado) input.value = mascarado;
+    });
+
+    el.tbl.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      const input = e.target.closest('[data-alert-input]');
+      if (!input) return;
+      e.preventDefault();
+      const cell = input.closest('.alert-cell');
+      salvarAlerta(input.dataset.alertInput, input.value.trim(),
+                   cell ? cell.querySelector('[data-alerta]') : null);
+    });
+
+    /* ---------- configurações da conta ---------- */
+    function abrirConfig(){
+      const u = state.user || {};
+      el.cfgNome.value  = u.nome  || el.cfgNome.value;
+      el.cfgEmail.value = u.email || el.cfgEmail.value;
+      el.cfgWhats.value = u.whatsapp || '';
+      el.cfgAtual.value = ''; el.cfgNova.value = ''; el.cfgConfirma.value = '';
+      el.cfgPerfilStatus.innerHTML = ''; el.cfgWhatsStatus.innerHTML = ''; el.cfgSenhaStatus.innerHTML = '';
+      if (typeof el.modalConfig.showModal === 'function') el.modalConfig.showModal();
+      else el.modalConfig.setAttribute('open', '');
+      el.cfgNome.focus();
+    }
+    function fecharConfig(){ el.modalConfig.close(); }
+
+    el.btnConfig.addEventListener('click', abrirConfig);
+    el.btnAbrirConfig.addEventListener('click', abrirConfig);
+    el.btnFecharConfig.addEventListener('click', fecharConfig);
+    el.modalConfig.addEventListener('click', e => { if (e.target === el.modalConfig) fecharConfig(); });
+
+    el.btnSalvarPerfil.addEventListener('click', async ()=>{
+      const nome  = el.cfgNome.value.trim();
+      const email = el.cfgEmail.value.trim();
+      if (!nome){ addStatusEm(el.cfgPerfilStatus, 'Informe o seu nome.', 'fail'); return; }
+      if (!email.includes('@') || !email.split('@').pop().includes('.')){
+        addStatusEm(el.cfgPerfilStatus, 'Informe um e-mail válido.', 'fail'); return;
+      }
+      el.btnSalvarPerfil.disabled = true;
+      try{
+        const r = await fetch('/api/perfil', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ nome, email })
+        });
+        const j = await r.json();
+        if (!r.ok || !j.ok){
+          addStatusEm(el.cfgPerfilStatus, j.msg || 'Não foi possível salvar.', 'fail');
+          return;
+        }
+        state.user = j.user;
+        const alvo = document.querySelector('#userName');
+        if (alvo) alvo.textContent = j.user.nome || j.user.email || '';
+        el.cfgNome.value = j.user.nome || ''; el.cfgEmail.value = j.user.email || '';
+        addStatusEm(el.cfgPerfilStatus, 'Perfil atualizado.', 'ok');
+      }catch(e){
+        addStatusEm(el.cfgPerfilStatus, 'Erro de rede ao salvar o perfil.', 'fail');
+        console.error(e);
+      } finally { el.btnSalvarPerfil.disabled = false; }
+    });
+
+    el.btnSalvarWhatsCfg.addEventListener('click', async ()=>{
+      const numero = el.cfgWhats.value.trim();
+      el.btnSalvarWhatsCfg.disabled = true;
+      try{
+        const r = await fetch('/api/whatsapp', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ numero })
+        });
+        const j = await r.json();
+        if (!r.ok || !j.ok){
+          addStatusEm(el.cfgWhatsStatus, j.msg || 'Informe um número válido com DDD.', 'fail');
+          return;
+        }
+        el.cfgWhats.value = j.whatsapp || '';
+        if (state.user) state.user.whatsapp = j.whatsapp || null;
+        renderWhatsResumo(j.whatsapp);
+        addStatusEm(el.cfgWhatsStatus,
+          j.whatsapp ? `Número salvo: ${fmtWhats(j.whatsapp)}` : 'Número removido.', 'ok');
+        await carregarNotificacoes();
+      }catch(e){
+        addStatusEm(el.cfgWhatsStatus, 'Erro de rede ao salvar o número.', 'fail');
+        console.error(e);
+      } finally { el.btnSalvarWhatsCfg.disabled = false; }
+    });
+
+    el.btnTestarWhatsCfg.addEventListener('click', async ()=>{
+      el.btnTestarWhatsCfg.disabled = true;
+      try{
+        const r = await fetch('/api/whatsapp/teste', { method:'POST' });
+        const j = await r.json();
+        if (!r.ok || !j.ok){
+          addStatusEm(el.cfgWhatsStatus, j.msg || 'Não foi possível enviar o teste.', 'fail');
+          return;
+        }
+        addStatusEm(
+          el.cfgWhatsStatus,
+          `Teste enviado para ${fmtWhats(j.whatsapp)}. Confira a conversa com o número de teste da Meta.`,
+          'ok'
+        );
+      }catch(e){
+        addStatusEm(el.cfgWhatsStatus, 'Erro de rede ao enviar o teste.', 'fail');
+        console.error(e);
+      } finally { el.btnTestarWhatsCfg.disabled = false; }
+    });
+
+    el.btnSalvarSenha.addEventListener('click', async ()=>{
+      const atual = el.cfgAtual.value;
+      const nova = el.cfgNova.value;
+      const confirma = el.cfgConfirma.value;
+      if (nova.length < 6){ addStatusEm(el.cfgSenhaStatus, 'A nova senha deve ter ao menos 6 caracteres.', 'fail'); return; }
+      if (nova !== confirma){ addStatusEm(el.cfgSenhaStatus, 'As senhas não conferem.', 'fail'); return; }
+      el.btnSalvarSenha.disabled = true;
+      try{
+        const r = await fetch('/api/senha', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ atual, nova, confirma })
+        });
+        const j = await r.json();
+        if (!r.ok || !j.ok){
+          addStatusEm(el.cfgSenhaStatus, j.msg || 'Não foi possível alterar a senha.', 'fail');
+          return;
+        }
+        el.cfgAtual.value = ''; el.cfgNova.value = ''; el.cfgConfirma.value = '';
+        addStatusEm(el.cfgSenhaStatus, 'Senha alterada com sucesso.', 'ok');
+      }catch(e){
+        addStatusEm(el.cfgSenhaStatus, 'Erro de rede ao alterar a senha.', 'fail');
+        console.error(e);
+      } finally { el.btnSalvarSenha.disabled = false; }
+    });
+
+    /* ---------- suporte ---------- */
+    function abrirSuporte(){
+      el.supStatus.innerHTML = '';
+      atualizarDicaSuporte();
+      if (typeof el.modalSuporte.showModal === 'function') el.modalSuporte.showModal();
+      else el.modalSuporte.setAttribute('open', '');
+      el.supAssunto.focus();
+    }
+    function fecharSuporte(){ el.modalSuporte.close(); }
+    function atualizarDicaSuporte(){
+      const dica = el.supTipo.value === 'site'
+        ? 'Dica: cole o link de uma busca de exemplo no site sugerido — isso ajuda muito a integrá-lo.'
+        : '';
+      el.supHint.textContent = dica;
+      el.supHint.hidden = !dica;
+    }
+
+    el.btnSuporte.addEventListener('click', abrirSuporte);
+    el.btnFecharSuporte.addEventListener('click', fecharSuporte);
+    el.modalSuporte.addEventListener('click', e => { if (e.target === el.modalSuporte) fecharSuporte(); });
+    el.supTipo.addEventListener('change', atualizarDicaSuporte);
+
+    el.btnEnviarSuporte.addEventListener('click', async ()=>{
+      const tipo = el.supTipo.value;
+      const assunto = el.supAssunto.value.trim();
+      const mensagem = el.supMensagem.value.trim();
+      if (!assunto){ addStatusEm(el.supStatus, 'Informe o assunto do pedido.', 'fail'); return; }
+      if (!mensagem){ addStatusEm(el.supStatus, 'Descreva o seu pedido nos detalhes.', 'fail'); return; }
+      el.btnEnviarSuporte.disabled = true;
+      addStatusEm(el.supStatus, 'Enviando…', 'info');
+      try{
+        const r = await fetch('/api/suporte', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ tipo, assunto, mensagem })
+        });
+        if (r.status === 401){ window.location = '/'; return; }
+        const j = await r.json();
+        if (!r.ok || !j.ok){
+          addStatusEm(el.supStatus, j.msg || 'Não foi possível enviar o pedido.', 'fail');
+          return;
+        }
+        addStatusEm(el.supStatus, j.msg || 'Pedido enviado. Obrigado!', j.enviado ? 'ok' : 'info');
+        el.supAssunto.value = ''; el.supMensagem.value = ''; el.supTipo.value = 'bug';
+        atualizarDicaSuporte();
+      }catch(e){
+        addStatusEm(el.supStatus, 'Erro de rede ao enviar o pedido.', 'fail');
+        console.error(e);
+      } finally { el.btnEnviarSuporte.disabled = false; }
+    });
+
+    el.btnNotifLimpar.addEventListener('click', async ()=>{
+      if (!Number(el.notifCount.textContent)) return;
+      if (!confirm('Limpar o histórico de notificações?\n\nOs alertas cadastrados nos imóveis continuam ativos.')) return;
+      el.btnNotifLimpar.disabled = true;
+      try{
+        await fetch('/api/notificacoes/limpar', { method:'POST' });
+        await carregarNotificacoes();
+      }catch(e){ console.error(e); }
+      finally { el.btnNotifLimpar.disabled = false; }
+    });
+
+    /* ---------- início ---------- */
+    checkSession().then(ok => { if (ok){ carregarPortais(); carregarImoveis(); carregarNotificacoes(); } });
+  </script>
+</body>
+</html>

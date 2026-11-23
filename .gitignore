@@ -1,0 +1,33 @@
+# ============================================================
+# Guru Imob — arquivos que NÃO devem ir para o repositório
+# ============================================================
+
+# Segredos e configuração local
+.env
+credenciais/
+
+# Banco de dados local (contas, históricos, suporte)
+*.db
+*.sqlite
+*.sqlite3
+
+# Dados gerados pelo scraping / exportações
+*.csv
+imoveis_zap*.json
+pagina_zap_debug.html
+
+# Logs
+*.log
+
+# Backups locais
+*_funcionou
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Ferramentas / editores
+.vscode/
+.idea/
+.DS_Store

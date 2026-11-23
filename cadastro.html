@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="light" />
+  <meta name="theme-color" content="#0F4C81" />
+  <meta name="robots" content="noindex" />
+  <title>Guru Imob — Criar conta</title>
+  <link rel="icon" type="image/png" href="/logo/guru-imob-logo.png" />
+  <style>
+    :root{
+      --brand-50:#EAF2FA; --brand-100:#D3E4F4; --brand-200:#A9C9E8;
+      --brand-500:#1B6FB5; --brand-600:#0F4C81; --brand-700:#0B3A63; --brand-800:#082B4A;
+      --accent-50:#E7F7F1; --accent-100:#C8EEDF; --accent-600:#0E9F6E; --accent-700:#0A7D57;
+      --border:#E2E8F0; --border-strong:#CBD5E1;
+      --text:#0F1B2D; --text-2:#41536B; --muted:#6B7C93;
+      --danger:#D92D20; --danger-50:#FEF3F2;
+      --warn:#B54708; --warn-50:#FFFAEB;
+      --ring:rgba(27,111,181,.32);
+      --r:12px; --r-lg:16px; --r-full:999px;
+      --sh-sm:0 1px 2px rgba(16,24,40,.06);
+      --sh-lg:0 18px 44px rgba(16,24,40,.12);
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    body{
+      margin:0; min-height:100vh; color:var(--text);
+      font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+      background:
+        radial-gradient(900px 500px at 85% -10%, var(--brand-50) 0%, transparent 60%),
+        radial-gradient(700px 420px at 0% 100%, var(--accent-50) 0%, transparent 55%),
+        #F5F8FC;
+      display:grid; place-items:center; padding:32px 20px;
+    }
+    .wrap{width:100%; max-width:440px}
+    .brand{display:flex; align-items:center; gap:12px; margin-bottom:20px; justify-content:center}
+    .brand-logo{display:block; width:min(100%, 340px); height:auto}
+    .card{
+      background:#fff; border:1px solid var(--border); border-radius:var(--r-lg);
+      box-shadow:var(--sh-lg); padding:26px;
+    }
+    .card h1{font-size:17px; font-weight:700; letter-spacing:-.01em; margin:0}
+    .card .sub{font-size:13px; color:var(--muted); margin:4px 0 22px}
+    label.field{display:block; margin-bottom:16px}
+    .field-label{display:block; font-size:13px; font-weight:600; color:var(--text-2); margin-bottom:7px}
+    input{
+      width:100%; font:inherit; color:var(--text);
+      padding:11px 13px; border-radius:var(--r);
+      border:1px solid var(--border-strong); background:#FAFCFE;
+      transition:border-color .15s, box-shadow .15s, background .15s;
+    }
+    input::placeholder{color:#9AA9BC}
+    input:hover{border-color:var(--muted)}
+    input:focus{
+      outline:none; background:#fff;
+      border-color:var(--brand-500); box-shadow:0 0 0 4px var(--ring);
+    }
+    input.invalid{border-color:var(--danger); background:#fff}
+    .hint{font-size:12px; color:var(--muted); margin:6px 0 0}
+    .btn{
+      width:100%; appearance:none; font:inherit; font-weight:700; font-size:14.5px;
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      padding:13px 16px; border-radius:var(--r); cursor:pointer;
+      border:1px solid var(--brand-700); color:#fff;
+      background:linear-gradient(180deg,var(--brand-500),var(--brand-600));
+      box-shadow:var(--sh-sm); transition:background .15s, transform .05s, opacity .15s;
+    }
+    .btn:hover{background:linear-gradient(180deg,var(--brand-600),var(--brand-700))}
+    .btn:active{transform:translateY(1px)}
+    .btn:disabled{opacity:.6; cursor:not-allowed; transform:none}
+    .btn.secondary{
+      margin-top:10px; background:#fff; color:var(--brand-700);
+      border:1px solid var(--border-strong); box-shadow:none;
+    }
+    .btn.secondary:hover{background:var(--brand-50); border-color:var(--brand-200)}
+    .status{display:flex; flex-wrap:wrap; gap:8px; margin-top:16px}
+    .status:empty{margin-top:0}
+    .chip{
+      font-size:12.5px; font-weight:600; padding:7px 12px; border-radius:var(--r-full);
+      background:var(--brand-50); border:1px solid var(--brand-100); color:var(--brand-700);
+    }
+    .chip.ok{background:var(--accent-50); border-color:var(--accent-100); color:var(--accent-700)}
+    .chip.fail{background:var(--danger-50); border-color:#FBD5D1; color:var(--danger)}
+    .chip.info{background:var(--warn-50); border-color:#FDE7B0; color:var(--warn)}
+    .foot{
+      display:flex; align-items:center; justify-content:center; gap:7px;
+      margin-top:20px; font-size:12px; color:var(--muted);
+    }
+    :focus-visible{outline:3px solid var(--ring); outline-offset:2px; border-radius:8px}
+    .spinner{
+      width:14px; height:14px; border-radius:50%;
+      border:2px solid rgba(255,255,255,.45); border-top-color:#fff;
+      animation:spin .7s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @media (max-width:720px){ .brand-logo{width:min(100%, 280px)} }
+    @media (prefers-reduced-motion:reduce){ *{animation-duration:.01ms !important; transition-duration:.01ms !important} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">
+      <img class="brand-logo" src="/logo/guru-imob-logo.png" alt="Guru Imob - Monitore preços de imóveis" />
+    </div>
+
+    <section class="card">
+      <h1>Criar conta</h1>
+      <p class="sub">Cada conta tem seu próprio workspace: seus imóveis ficam isolados dos demais usuários.</p>
+
+      <form id="formCadastro" autocomplete="on">
+        <label class="field" for="nome">
+          <span class="field-label">Nome</span>
+          <input id="nome" name="nome" type="text" autocomplete="name" placeholder="Seu nome completo" required />
+        </label>
+        <label class="field" for="email">
+          <span class="field-label">E-mail</span>
+          <input id="email" name="email" type="email" autocomplete="email" placeholder="voce@exemplo.com" required />
+        </label>
+        <label class="field" for="senha">
+          <span class="field-label">Senha</span>
+          <input id="senha" name="senha" type="password" autocomplete="new-password" placeholder="mínimo de 6 caracteres" required />
+          <p class="hint">Use ao menos 6 caracteres.</p>
+        </label>
+        <label class="field" for="confirma">
+          <span class="field-label">Confirmação de senha</span>
+          <input id="confirma" name="confirma" type="password" autocomplete="new-password" placeholder="repita a senha" required />
+        </label>
+
+        <button id="btnCadastro" class="btn" type="submit">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/>
+          </svg>
+          Criar minha conta
+        </button>
+
+        <a class="btn secondary" href="/" role="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m15 18-6-6 6-6"/>
+          </svg>
+          Voltar para o login
+        </a>
+      </form>
+
+      <div id="status" class="status" role="status" aria-live="polite"></div>
+    </section>
+
+    <p class="foot">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>
+      </svg>
+      Conexão e dados processados no seu próprio servidor
+    </p>
+  </div>
+
+  <script>
+    const statusEl  = document.querySelector('#status');
+    const nomeEl    = document.querySelector('#nome');
+    const emailEl   = document.querySelector('#email');
+    const senhaEl   = document.querySelector('#senha');
+    const confirmaEl= document.querySelector('#confirma');
+    const btnCad    = document.querySelector('#btnCadastro');
+    const form      = document.querySelector('#formCadastro');
+
+    function chip(text, tipo){
+      const s = document.createElement('span');
+      s.className = 'chip ' + (tipo || 'info');
+      s.textContent = text;
+      return s;
+    }
+    const limpar = () => { statusEl.innerHTML = ''; };
+    const marcar = (el, ruim) => el.classList.toggle('invalid', ruim);
+
+    async function checkSession(){
+      try{
+        const r = await fetch('/api/session');
+        const j = await r.json();
+        if (j.logged) window.location = '/home';
+      }catch(e){}
+    }
+    checkSession();
+
+    function validar(){
+      limpar();
+      const nome = nomeEl.value.trim();
+      const email = emailEl.value.trim();
+      const senha = senhaEl.value;
+      const confirma = confirmaEl.value;
+
+      if (!nome){
+        statusEl.appendChild(chip('Informe o seu nome.', 'fail'));
+        nomeEl.focus(); return null;
+      }
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
+        statusEl.appendChild(chip('Informe um e-mail válido.', 'fail'));
+        emailEl.focus(); return null;
+      }
+      if (senha.length < 6){
+        statusEl.appendChild(chip('A senha deve ter ao menos 6 caracteres.', 'fail'));
+        senhaEl.focus(); return null;
+      }
+      if (senha !== confirma){
+        statusEl.appendChild(chip('As senhas não conferem.', 'fail'));
+        marcar(confirmaEl, true); confirmaEl.focus(); return null;
+      }
+      marcar(confirmaEl, false);
+      return { nome, email, senha, confirma };
+    }
+
+    async function criar(){
+      const dados = validar();
+      if (!dados) return;
+
+      btnCad.disabled = true;
+      btnCad.innerHTML = '<span class="spinner"></span> Criando conta…';
+      try{
+        const r = await fetch('/api/cadastro', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(dados)
+        });
+        const j = await r.json().catch(() => ({}));
+        if (r.ok && j.ok){
+          limpar();
+          statusEl.appendChild(chip('Conta criada! Redirecionando para o login…', 'ok'));
+          setTimeout(() => { window.location = '/'; }, 1200);
+          return;
+        }
+        statusEl.appendChild(chip(j.msg || 'Não foi possível criar a conta.', 'fail'));
+      }catch(e){
+        statusEl.appendChild(chip('Erro de rede. Tente novamente.', 'fail'));
+      }finally{
+        btnCad.disabled = false;
+        btnCad.innerHTML =
+          '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg> Criar minha conta';
+      }
+    }
+
+    form.addEventListener('submit', e => { e.preventDefault(); criar(); });
+  </script>
+</body>
+</html>

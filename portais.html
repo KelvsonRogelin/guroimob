@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="light" />
+  <meta name="theme-color" content="#0F4C81" />
+  <meta name="description" content="Guru Imob — veja em quais sites de imóveis você pode acompanhar preços e receber avisos de queda." />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Sites monitorados — Guru Imob</title>
+  <link rel="icon" type="image/png" href="/logo/guru-imob-logo.png" />
+  <style>
+    /* ============================================================
+       Guru Imob — Design System (tema claro profissional)
+       ============================================================ */
+    :root{
+      --brand-50:#EAF2FA;  --brand-100:#D3E4F4;  --brand-200:#A9C9E8;
+      --brand-500:#1B6FB5; --brand-600:#0F4C81; --brand-700:#0B3A63; --brand-800:#082B4A;
+      --accent-50:#E7F7F1; --accent-100:#C8EEDF;
+      --accent-500:#12B886; --accent-600:#0E9F6E; --accent-700:#0A7D57;
+      --bg:#F5F8FC; --surface:#FFFFFF; --surface-2:#FAFCFE;
+      --border:#E2E8F0; --border-strong:#CBD5E1;
+      --text:#0F1B2D; --text-2:#41536B; --muted:#6B7C93;
+      --danger:#D92D20; --danger-50:#FEF3F2;
+      --warn:#B54708;  --warn-50:#FFFAEB;
+      --ring:rgba(27,111,181,.32);
+      --r-sm:8px; --r:12px; --r-lg:16px; --r-full:999px;
+      --sh-sm:0 1px 2px rgba(16,24,40,.06);
+      --sh:0 4px 16px rgba(16,24,40,.07);
+      --sh-lg:0 12px 32px rgba(16,24,40,.10);
+      --maxw:1240px;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    html{-webkit-text-size-adjust:100%}
+    body{
+      margin:0; background:var(--bg); color:var(--text);
+      font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+      -webkit-font-smoothing:antialiased;
+    }
+    h1,h2,h3,p{margin:0}
+    a{color:var(--brand-600)}
+    :focus-visible{outline:3px solid var(--ring); outline-offset:2px; border-radius:var(--r-sm)}
+    .sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0}
+    .skip{position:absolute; left:16px; top:-60px; z-index:100; background:var(--brand-600); color:#fff; padding:10px 16px; border-radius:var(--r-sm); text-decoration:none; font-weight:600; transition:top .15s ease}
+    .skip:focus{top:16px}
+
+    /* ---------- App bar ---------- */
+    .appbar{position:sticky; top:0; z-index:50; background:rgba(255,255,255,.92); backdrop-filter:saturate(180%) blur(12px); border-bottom:1px solid var(--border)}
+    .appbar-in{max-width:var(--maxw); margin:0 auto; padding:12px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px}
+    .brand{display:flex; align-items:center; gap:12px; min-width:0}
+    .brand-logo{display:block; flex:none; height:72px; width:auto; max-width:min(100%, 390px); object-fit:contain}
+    @media (max-width:720px){ .brand-logo{height:58px; max-width:300px} }
+    .appbar-actions{display:flex; align-items:center; gap:10px; flex:none}
+
+    /* ---------- Botões ---------- */
+    .btn{
+      appearance:none; display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      font:inherit; font-weight:600; font-size:14px; line-height:1;
+      padding:11px 16px; border-radius:var(--r); cursor:pointer; text-decoration:none;
+      border:1px solid var(--border-strong); background:var(--surface); color:var(--text);
+      transition:background .15s, border-color .15s, box-shadow .15s, transform .05s;
+      box-shadow:var(--sh-sm); white-space:nowrap;
+    }
+    .btn:hover{background:var(--surface-2); border-color:var(--muted)}
+    .btn:active{transform:translateY(1px)}
+    .btn svg{flex:none}
+    .btn-primary{background:linear-gradient(180deg,var(--brand-500),var(--brand-600)); border-color:var(--brand-700); color:#fff}
+    .btn-primary:hover{background:linear-gradient(180deg,var(--brand-600),var(--brand-700)); border-color:var(--brand-800)}
+    .btn-ghost{background:transparent; border-color:transparent; box-shadow:none; color:var(--text-2)}
+    .btn-ghost:hover{background:var(--brand-50); border-color:transparent; color:var(--brand-700)}
+
+    /* ---------- Layout ---------- */
+    main{max-width:var(--maxw); margin:0 auto; padding:28px 24px 72px; display:grid; gap:20px}
+    .card{background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--sh); overflow:hidden}
+    .card-head{padding:20px 22px 0}
+    .card-head h2{font-size:16px; font-weight:700; letter-spacing:-.01em}
+    .card-sub{font-size:13px; color:var(--muted); margin-top:3px}
+    .card-body{padding:18px 22px 22px}
+
+    /* ---------- Hero ---------- */
+    .hero{
+      background:linear-gradient(180deg,var(--brand-50),var(--surface));
+      border:1px solid var(--brand-100); border-radius:var(--r-lg);
+      box-shadow:var(--sh); padding:26px 26px 24px;
+    }
+    .hero h1{font-size:24px; font-weight:800; letter-spacing:-.02em; color:var(--brand-800)}
+    .hero p{font-size:14.5px; color:var(--text-2); margin-top:8px; max-width:70ch}
+    .hero-tags{display:flex; flex-wrap:wrap; gap:8px; margin-top:16px}
+    .tag{
+      display:inline-flex; align-items:center; gap:7px;
+      font-size:12.5px; font-weight:700; color:var(--brand-700);
+      background:var(--surface); border:1px solid var(--brand-100);
+      padding:7px 12px; border-radius:var(--r-full); box-shadow:var(--sh-sm);
+    }
+
+    /* ---------- Grid de portais ---------- */
+    .grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px}
+    @media (max-width:860px){ .grid{grid-template-columns:1fr} }
+    .portal{
+      border:1px solid var(--border); border-radius:var(--r); background:var(--surface);
+      box-shadow:var(--sh-sm); padding:18px; display:flex; flex-direction:column; gap:14px;
+      transition:border-color .15s, box-shadow .15s;
+    }
+    .portal:hover{border-color:var(--brand-200); box-shadow:var(--sh)}
+    .portal-top{display:flex; align-items:center; gap:13px; min-width:0}
+    .portal-ico{
+      flex:none; width:44px; height:44px; border-radius:12px; display:grid; place-items:center;
+      background:var(--brand-50); color:var(--brand-600); box-shadow:var(--sh-sm);
+    }
+    .portal-name{font-size:16px; font-weight:800; letter-spacing:-.01em; line-height:1.2}
+    .portal-host{font-size:12.5px; color:var(--muted); font-weight:600; margin-top:2px; word-break:break-all}
+    .portal-meta{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:auto}
+    .meta-box{background:var(--surface-2); border:1px solid var(--border); border-radius:var(--r-sm); padding:10px 12px}
+    .meta-lab{font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--muted)}
+    .meta-val{font-size:14px; font-weight:700; color:var(--text); margin-top:3px; font-variant-numeric:tabular-nums}
+    .badge{
+      display:inline-flex; align-items:center; gap:5px; vertical-align:middle;
+      font-size:10.5px; font-weight:800; letter-spacing:.04em; text-transform:uppercase;
+      padding:4px 9px; border-radius:var(--r-full); white-space:nowrap;
+    }
+    .badge.scroll{background:var(--accent-50); border:1px solid var(--accent-100); color:var(--accent-700)}
+    .badge.pag{background:var(--brand-50); border:1px solid var(--brand-100); color:var(--brand-700)}
+    .badge.def{background:var(--warn-50); border:1px solid #FDE7B0; color:var(--warn)}
+
+    /* ---------- Como funciona ---------- */
+    .steps{display:grid; gap:14px}
+    .step{display:flex; gap:14px; align-items:flex-start}
+    .step-n{
+      flex:none; width:30px; height:30px; border-radius:9px; display:grid; place-items:center;
+      background:var(--brand-600); color:#fff; font-weight:800; font-size:13.5px; box-shadow:var(--sh-sm);
+    }
+    .step-t{font-weight:700; font-size:14.5px}
+    .step-d{font-size:13.5px; color:var(--text-2); margin-top:2px}
+
+    /* ---------- Observações ---------- */
+    .notes{display:grid; gap:10px}
+    .note{
+      display:flex; gap:11px; align-items:flex-start;
+      border:1px solid var(--border); border-left:3px solid var(--brand-500);
+      border-radius:var(--r); background:var(--surface-2); padding:12px 14px;
+    }
+    .note.warn{border-left-color:var(--warn)}
+    .note-ico{flex:none; color:var(--brand-600); margin-top:1px}
+    .note.warn .note-ico{color:var(--warn)}
+    .note-t{font-weight:700; font-size:13.5px}
+    .note-d{font-size:13px; color:var(--text-2); margin-top:2px}
+    code{
+      font:12.5px/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+      background:var(--brand-50); color:var(--brand-700);
+      border:1px solid var(--brand-100); border-radius:5px; padding:1px 5px;
+    }
+
+    /* ---------- Rodapé ---------- */
+    footer{border-top:1px solid var(--border); background:var(--surface); margin-top:8px}
+    .foot-in{max-width:var(--maxw); margin:0 auto; padding:22px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; font-size:12.5px; color:var(--muted)}
+    .foot-trust{display:inline-flex; align-items:center; gap:6px; color:var(--text-2); font-weight:600}
+    .empty{padding:36px 22px; text-align:center; color:var(--muted)}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="appbar">
+    <div class="appbar-in">
+      <div class="brand">
+        <img class="brand-logo" src="/logo/guru-imob-logo.png" alt="Guru Imob - Monitore preços de imóveis" />
+        <span class="sr-only">Guru Imob - Monitor de preços de imóveis</span>
+      </div>
+      <div class="appbar-actions">
+        <a class="btn btn-primary" href="/home">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>
+          </svg>
+          Voltar ao painel
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <section class="hero" aria-labelledby="t-hero">
+      <h1 id="t-hero">Sites que o Guru Imob monitora para você</h1>
+      <p>
+        Você cola o link de uma busca de imóveis e o Guru Imob faz o resto: lê os anúncios,
+        calcula o <strong>preço por metro quadrado</strong>, guarda o histórico de preços e
+        te avisa quando algum imóvel ficar mais barato.
+      </p>
+      <div class="hero-tags">
+        <span class="tag">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+          <span id="qtdPortais">—</span>&nbsp;sites monitorados
+        </span>
+        <span class="tag">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+          Preço por metro quadrado na hora
+        </span>
+        <span class="tag">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+          Aviso quando o preço cai
+        </span>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="t-lista">
+      <div class="card-head">
+        <h2 id="t-lista">Sites monitorados</h2>
+        <p class="card-sub">Escolha quantas páginas buscar e o Guru Imob lê os anúncios para você.</p>
+      </div>
+      <div class="card-body">
+        <div class="grid" id="gridPortais" aria-live="polite">
+          <div class="empty">Carregando os sites…</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="t-como">
+      <div class="card-head">
+        <h2 id="t-como">Como funciona</h2>
+        <p class="card-sub">As contas são feitas do mesmo jeito em todos os sites, então dá para comparar os valores entre eles.</p>
+      </div>
+      <div class="card-body">
+        <div class="steps">
+          <div class="step">
+            <span class="step-n">1</span>
+            <div>
+              <div class="step-t">Você cola o link da busca</div>
+              <div class="step-d">Use o endereço de uma busca já filtrada no site (por bairro, preço, número de quartos…).</div>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-n">2</span>
+            <div>
+              <div class="step-t">O Guru Imob lê os anúncios</div>
+              <div class="step-d">Ele abre o site, percorre os resultados e captura o que interessa: preço, área, quartos e vagas.</div>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-n">3</span>
+            <div>
+              <div class="step-t">Tudo é organizado igual</div>
+              <div class="step-d">Preços e áreas são entendidos no formato brasileiro e o preço por metro quadrado é calculado igual em todos os sites.</div>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-n">4</span>
+            <div>
+              <div class="step-t">Histórico e avisos</div>
+              <div class="step-d">Cada busca atualiza o histórico de preços. Se o preço cair abaixo do valor que você definiu, você recebe um aviso.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="t-obs">
+      <div class="card-head">
+        <h2 id="t-obs">Coisas importantes de saber</h2>
+        <p class="card-sub">Para você não ter surpresas ao usar.</p>
+      </div>
+      <div class="card-body">
+        <div class="notes">
+          <div class="note">
+            <span class="note-ico" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            </span>
+            <div>
+              <div class="note-t">Links de outros sites</div>
+              <div class="note-d">Se o link não for de um dos sites acima, o Guru Imob ainda tenta buscar, mas o resultado pode não ser confiável. Prefira os sites da lista.</div>
+            </div>
+          </div>
+          <div class="note warn">
+            <span class="note-ico" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+            </span>
+            <div>
+              <div class="note-t">Se o site esconder os anúncios</div>
+              <div class="note-d">Alguns sites dificultam a leitura automática. Quando isso acontece, o Guru Imob tenta de novo com a janela do navegador aberta, e você pode ver a busca acontecendo.</div>
+            </div>
+          </div>
+          <div class="note">
+            <span class="note-ico" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+            </span>
+            <div>
+              <div class="note-t">Seus dados ficam guardados</div>
+              <div class="note-d">Tudo o que você acompanha fica salvo no Guru Imob. Se você remover um imóvel, o histórico de preços dele continua guardado, para você não perder o que já acompanhou.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="foot-in">
+      <span>© Guru Imob — monitor de preços de imóveis</span>
+      <span class="foot-trust">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Sessão protegida
+      </span>
+    </div>
+  </footer>
+
+  <script>
+  (function(){
+    'use strict';
+
+    // Ícone e descrição são apenas de apresentação; os dados vêm de /api/portais.
+    var ICONE = '' +
+      '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+      'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/>' +
+      '<path d="M9 21v-6h6v6"/><path d="M10 10h.01"/><path d="M14 10h.01"/></svg>';
+
+    function esc(s){
+      return String(s == null ? '' : s)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+
+    function rotuloEstrategia(p){
+      if (p.estrategia === 'paginado'){
+        return { cls:'pag', txt:'Dividido em páginas' };
+      }
+      return { cls:'scroll', txt:'Carrega mais ao rolar' };
+    }
+
+    function comoLe(p){
+      if (p.estrategia === 'paginado'){
+        return 'Lê 1 página por vez';
+      }
+      return 'Faz ~' + esc(p.rolagens_por_pagina) + ' rolagens e lê tudo';
+    }
+
+    function cardPortal(p){
+      var est = rotuloEstrategia(p);
+      return '' +
+      '<article class="portal">' +
+        '<div class="portal-top">' +
+          '<span class="portal-ico" aria-hidden="true">' + ICONE + '</span>' +
+          '<div style="min-width:0">' +
+            '<div class="portal-name">' + esc(p.nome) + '</div>' +
+            '<div class="portal-host">' + esc(p.chave) + '</div>' +
+          '</div>' +
+          '<span class="badge ' + est.cls + '" style="margin-left:auto">' + est.txt + '</span>' +
+        '</div>' +
+        '<div class="portal-meta">' +
+          '<div class="meta-box">' +
+            '<div class="meta-lab">Quando você pede 1 página</div>' +
+            '<div class="meta-val">' + comoLe(p) + '</div>' +
+          '</div>' +
+          '<div class="meta-box">' +
+            '<div class="meta-lab">Preço por metro quadrado</div>' +
+            '<div class="meta-val">Calculado automaticamente</div>' +
+          '</div>' +
+        '</div>' +
+      '</article>';
+    }
+
+    function render(lista){
+      var grid = document.getElementById('gridPortais');
+      if (!lista || !lista.length){
+        grid.innerHTML = '<div class="empty">Nenhum portal configurado.</div>';
+        return;
+      }
+      grid.innerHTML = lista.map(cardPortal).join('');
+      document.getElementById('qtdPortais').textContent = lista.length;
+    }
+
+    async function carregar(){
+      try {
+        var r = await fetch('/api/portais');
+        if (r.status === 401){ window.location = '/'; return; }
+        var j = await r.json();
+        if (r.ok && j.ok){ render(j.portais || []); return; }
+        render([]);
+      } catch (e){
+        document.getElementById('gridPortais').innerHTML =
+          '<div class="empty">Não foi possível carregar os portais agora.</div>';
+      }
+    }
+
+    carregar();
+  })();
+  </script>
+</body>
+</html>
